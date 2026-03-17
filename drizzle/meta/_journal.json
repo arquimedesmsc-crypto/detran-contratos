@@ -1,5 +1,27 @@
 {
   "version": "7",
   "dialect": "mysql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1773763980132,
+      "tag": "0000_abandoned_lizard",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1773764116349,
+      "tag": "0001_typical_falcon",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1773764222805,
+      "tag": "0002_demonic_screwball",
+      "breakpoints": true
+    }
+  ]
 }

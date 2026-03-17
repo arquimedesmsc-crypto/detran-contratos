@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `vpn_conexoes` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`nomeUsuario` varchar(128) NOT NULL,\n\t`matricula` varchar(32),\n\t`diretoria` varchar(256),\n\t`servidor` varchar(128) NOT NULL,\n\t`ipAtribuido` varchar(45),\n\t`status` enum('conectado','desconectado','bloqueado') NOT NULL DEFAULT 'desconectado',\n\t`ultimaConexao` bigint,\n\t`bytesEnviados` bigint DEFAULT 0,\n\t`bytesRecebidos` bigint DEFAULT 0,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `vpn_conexoes_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute CREATE TABLE `vpn_conexoes` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`nomeUsuario` varchar(128) NOT NULL,\n\t`matricula` varchar(32),\n\t`diretoria` varchar(256),\n\t`servidor` varchar(128) NOT NULL,\n\t`ipAtribuido` varchar(45),\n\t`status` enum('conectado','desconectado','bloqueado') NOT NULL DEFAULT 'desconectado',\n\t`ultimaConexao` bigint,\n\t`bytesEnviados` bigint DEFAULT 0,\n\t`bytesRecebidos` bigint DEFAULT 0,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `vpn_conexoes_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 198
+}

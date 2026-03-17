@@ -1,0 +1,28 @@
+# Project TODO
+
+- [x] Modelo de banco de dados para instrumentos (número, tipo, partes, objeto, datas, processo SEI, diretoria, aditivos, status)
+- [x] Migração SQL aplicada no banco
+- [x] API tRPC CRUD: listar, criar, editar, deletar instrumentos
+- [x] API tRPC: buscar instrumentos por filtros (diretoria, tipo, status vigência)
+- [x] Importação automática dos 57 instrumentos catalogados no banco
+- [x] Design system e tema visual corporativo (cores, fontes, layout)
+- [x] DashboardLayout com sidebar de navegação
+- [x] Dashboard: gráfico distribuição por diretoria
+- [x] Dashboard: gráfico distribuição por tipo de instrumento
+- [x] Dashboard: gráfico status de vigência (vigente/próximo vencimento/vencido)
+- [x] Dashboard: timeline de vencimentos (integrado na seção de alertas)
+- [x] Dashboard: estatísticas gerais (total, distribuição por ano, prazo médio)
+- [x] Página de listagem com filtros avançados
+- [x] Página de listagem com paginação
+- [x] Página de listagem com ordenação por colunas
+- [x] Indicadores visuais de status: vigente (verde), próximo vencimento (amarelo), vencido (vermelho)
+- [x] Página de detalhes do instrumento com todas as informações
+- [x] Página de detalhes: histórico de termos aditivos
+- [x] Formulário de criação de novo instrumento
+- [x] Formulário de edição de instrumento existente
+- [x] Sistema de alertas para instrumentos próximos do vencimento (< 180 dias)
+- [x] Testes unitários (vitest)
+- [x] Modelo de banco de dados para VPN (conexões, servidores, usuários, status)
+- [x] API tRPC para VPN com dados mockup
+- [x] Página de VPN com listagem de conexões e status
+- [x] Dashboard VPN com indicadores de conexão

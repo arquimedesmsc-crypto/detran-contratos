@@ -1,17 +1,7 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, bigint } from "drizzle-orm/mysql-core";
 
-/**
- * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
- */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
@@ -25,4 +15,49 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+export const instrumentos = mysqlTable("instrumentos", {
+  id: int("id").autoincrement().primaryKey(),
+  numero: varchar("numero", { length: 64 }).notNull(),
+  tipo: varchar("tipo", { length: 128 }).notNull(),
+  partesEnvolvidas: text("partesEnvolvidas").notNull(),
+  objeto: text("objeto").notNull(),
+  dataInicio: bigint("dataInicio", { mode: "number" }),
+  dataTermino: bigint("dataTermino", { mode: "number" }),
+  processoSei: varchar("processoSei", { length: 128 }),
+  diretoria: varchar("diretoria", { length: 256 }).notNull(),
+  arquivoOrigem: varchar("arquivoOrigem", { length: 512 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Instrumento = typeof instrumentos.$inferSelect;
+export type InsertInstrumento = typeof instrumentos.$inferInsert;
+
+export const termosAditivos = mysqlTable("termos_aditivos", {
+  id: int("id").autoincrement().primaryKey(),
+  instrumentoId: int("instrumentoId").notNull(),
+  descricao: text("descricao").notNull(),
+  dataAditivo: bigint("dataAditivo", { mode: "number" }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type TermoAditivo = typeof termosAditivos.$inferSelect;
+export type InsertTermoAditivo = typeof termosAditivos.$inferInsert;
+
+export const vpnConexoes = mysqlTable("vpn_conexoes", {
+  id: int("id").autoincrement().primaryKey(),
+  nomeUsuario: varchar("nomeUsuario", { length: 128 }).notNull(),
+  matricula: varchar("matricula", { length: 32 }),
+  diretoria: varchar("diretoria", { length: 256 }),
+  servidor: varchar("servidor", { length: 128 }).notNull(),
+  ipAtribuido: varchar("ipAtribuido", { length: 45 }),
+  status: mysqlEnum("status", ["conectado", "desconectado", "bloqueado"]).default("desconectado").notNull(),
+  ultimaConexao: bigint("ultimaConexao", { mode: "number" }),
+  bytesEnviados: bigint("bytesEnviados", { mode: "number" }).default(0),
+  bytesRecebidos: bigint("bytesRecebidos", { mode: "number" }).default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type VpnConexao = typeof vpnConexoes.$inferSelect;
+export type InsertVpnConexao = typeof vpnConexoes.$inferInsert;
