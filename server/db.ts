@@ -66,6 +66,11 @@ export async function listInstrumentos(filters?: {
   diretoria?: string;
   tipo?: string;
   search?: string;
+  statusVigencia?: string; // "vigente" | "proximo" | "vencido" | "sem_data"
+  dataInicioMin?: number;
+  dataInicioMax?: number;
+  dataTerminoMin?: number;
+  dataTerminoMax?: number;
   page?: number;
   pageSize?: number;
   sortBy?: string;
@@ -74,12 +79,32 @@ export async function listInstrumentos(filters?: {
   const db = await getDb();
   if (!db) return { items: [], total: 0 };
 
+  const now = Date.now();
+  const threshold180 = now + 180 * 24 * 60 * 60 * 1000;
+
   const conditions = [];
   if (filters?.diretoria) conditions.push(eq(instrumentos.diretoria, filters.diretoria));
   if (filters?.tipo) conditions.push(eq(instrumentos.tipo, filters.tipo));
   if (filters?.search) conditions.push(
     sql`(${instrumentos.numero} LIKE ${`%${filters.search}%`} OR ${instrumentos.partesEnvolvidas} LIKE ${`%${filters.search}%`} OR ${instrumentos.objeto} LIKE ${`%${filters.search}%`} OR ${instrumentos.processoSei} LIKE ${`%${filters.search}%`})`
   );
+
+  // Filtro por status de vigência
+  if (filters?.statusVigencia === "vigente") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NOT NULL AND ${instrumentos.dataTermino} > ${threshold180}`);
+  } else if (filters?.statusVigencia === "proximo") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NOT NULL AND ${instrumentos.dataTermino} > ${now} AND ${instrumentos.dataTermino} <= ${threshold180}`);
+  } else if (filters?.statusVigencia === "vencido") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NOT NULL AND ${instrumentos.dataTermino} <= ${now}`);
+  } else if (filters?.statusVigencia === "sem_data") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NULL`);
+  }
+
+  // Filtros por intervalo de datas
+  if (filters?.dataInicioMin) conditions.push(sql`${instrumentos.dataInicio} >= ${filters.dataInicioMin}`);
+  if (filters?.dataInicioMax) conditions.push(sql`${instrumentos.dataInicio} <= ${filters.dataInicioMax}`);
+  if (filters?.dataTerminoMin) conditions.push(sql`${instrumentos.dataTermino} >= ${filters.dataTerminoMin}`);
+  if (filters?.dataTerminoMax) conditions.push(sql`${instrumentos.dataTermino} <= ${filters.dataTerminoMax}`);
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
 
@@ -135,9 +160,17 @@ export async function getAllInstrumentosForExport(filters?: {
   diretoria?: string;
   tipo?: string;
   search?: string;
+  statusVigencia?: string;
+  dataInicioMin?: number;
+  dataInicioMax?: number;
+  dataTerminoMin?: number;
+  dataTerminoMax?: number;
 }) {
   const db = await getDb();
   if (!db) return [];
+
+  const now = Date.now();
+  const threshold180 = now + 180 * 24 * 60 * 60 * 1000;
 
   const conditions = [];
   if (filters?.diretoria) conditions.push(eq(instrumentos.diretoria, filters.diretoria));
@@ -145,6 +178,19 @@ export async function getAllInstrumentosForExport(filters?: {
   if (filters?.search) conditions.push(
     sql`(${instrumentos.numero} LIKE ${`%${filters.search}%`} OR ${instrumentos.partesEnvolvidas} LIKE ${`%${filters.search}%`} OR ${instrumentos.objeto} LIKE ${`%${filters.search}%`} OR ${instrumentos.processoSei} LIKE ${`%${filters.search}%`})`
   );
+  if (filters?.statusVigencia === "vigente") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NOT NULL AND ${instrumentos.dataTermino} > ${threshold180}`);
+  } else if (filters?.statusVigencia === "proximo") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NOT NULL AND ${instrumentos.dataTermino} > ${now} AND ${instrumentos.dataTermino} <= ${threshold180}`);
+  } else if (filters?.statusVigencia === "vencido") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NOT NULL AND ${instrumentos.dataTermino} <= ${now}`);
+  } else if (filters?.statusVigencia === "sem_data") {
+    conditions.push(sql`${instrumentos.dataTermino} IS NULL`);
+  }
+  if (filters?.dataInicioMin) conditions.push(sql`${instrumentos.dataInicio} >= ${filters.dataInicioMin}`);
+  if (filters?.dataInicioMax) conditions.push(sql`${instrumentos.dataInicio} <= ${filters.dataInicioMax}`);
+  if (filters?.dataTerminoMin) conditions.push(sql`${instrumentos.dataTermino} >= ${filters.dataTerminoMin}`);
+  if (filters?.dataTerminoMax) conditions.push(sql`${instrumentos.dataTermino} <= ${filters.dataTerminoMax}`);
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
 

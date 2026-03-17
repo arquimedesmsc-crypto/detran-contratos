@@ -48,3 +48,12 @@
 - [x] Botão de detalhes na listagem de VPN
 - [x] Criar README.md detalhado para o GitHub
 - [x] Atualizar repositório no GitHub
+- [x] API tRPC: filtro por status de vigência (vigente/próximo/vencido/sem data)
+- [x] API tRPC: filtro por intervalo de datas de vigência (dataInicio e dataTermino)
+- [x] Painel de filtros avançados na listagem de Instrumentos
+- [x] Filtro por diretoria (aprimorado com contagem)
+- [x] Filtro por status de vigência com indicadores visuais
+- [x] Filtro por intervalo de datas (data início e data término)
+- [x] Chips/tags de filtros ativos com botão de remoção individual
+- [x] Contador de resultados filtrados
+- [x] Botão "Limpar todos os filtros"
