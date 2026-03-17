@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `anexos` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `entidadeTipo` enum('instrumento','vpn') NOT NULL,\n  `entidadeId` int NOT NULL,\n  `nomeOriginal` varchar(512) NOT NULL,\n  `nomeArquivo` varchar(512) NOT NULL,\n  `mimeType` varchar(128) NOT NULL,\n  `tamanho` bigint NOT NULL,\n  `s3Key` varchar(1024) NOT NULL,\n  `s3Url` text NOT NULL,\n  `uploadedBy` varchar(64),\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `anexos_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute CREATE TABLE `anexos` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `entidadeTipo` enum('instrumento','vpn') NOT NULL,\n  `entidadeId` int NOT NULL,\n  `nomeOriginal` varchar(512) NOT NULL,\n  `nomeArquivo` varchar(512) NOT NULL,\n  `mimeType` varchar(128) NOT NULL,\n  `tamanho` bigint NOT NULL,\n  `s3Key` varchar(1024) NOT NULL,\n  `s3Url` text NOT NULL,\n  `uploadedBy` varchar(64),\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `anexos_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 218
+}

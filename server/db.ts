@@ -5,6 +5,7 @@ import {
   instrumentos, InsertInstrumento, Instrumento,
   termosAditivos, InsertTermoAditivo,
   vpnConexoes, InsertVpnConexao,
+  anexos, InsertAnexo,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -337,4 +338,73 @@ export async function getVpnStats() {
   const conectadas = conectadasResult[0]?.count ?? 0;
 
   return { total, conectadas, desconectadas: total - conectadas };
+}
+
+export async function getVpnById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(vpnConexoes).where(eq(vpnConexoes.id, id)).limit(1);
+  return result[0] ?? null;
+}
+
+export async function createVpnConexao(data: InsertVpnConexao) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(vpnConexoes).values(data);
+  return result[0].insertId;
+}
+
+export async function updateVpnConexao(id: number, data: Partial<InsertVpnConexao>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(vpnConexoes).set(data).where(eq(vpnConexoes.id, id));
+}
+
+export async function deleteVpnConexao(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  // Remove anexos associados
+  await db.delete(anexos).where(and(eq(anexos.entidadeTipo, "vpn"), eq(anexos.entidadeId, id)));
+  await db.delete(vpnConexoes).where(eq(vpnConexoes.id, id));
+}
+
+// ==================== ANEXOS ====================
+export async function listAnexos(entidadeTipo: "instrumento" | "vpn", entidadeId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(anexos)
+    .where(and(eq(anexos.entidadeTipo, entidadeTipo), eq(anexos.entidadeId, entidadeId)))
+    .orderBy(asc(anexos.createdAt));
+}
+
+export async function createAnexo(data: InsertAnexo) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(anexos).values(data);
+  return result[0].insertId;
+}
+
+export async function deleteAnexo(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(anexos).where(eq(anexos.id, id)).limit(1);
+  const anexo = result[0];
+  await db.delete(anexos).where(eq(anexos.id, id));
+  return anexo; // retorna para poder deletar do S3
+}
+
+export async function countAnexosByEntidade(entidadeTipo: "instrumento" | "vpn", entidadeIds: number[]) {
+  const db = await getDb();
+  if (!db) return {};
+  if (entidadeIds.length === 0) return {};
+  const result = await db.select({
+    entidadeId: anexos.entidadeId,
+    count: count(),
+  }).from(anexos)
+    .where(and(
+      eq(anexos.entidadeTipo, entidadeTipo),
+      sql`${anexos.entidadeId} IN (${sql.join(entidadeIds.map(id => sql`${id}`), sql`, `)})`
+    ))
+    .groupBy(anexos.entidadeId);
+  return Object.fromEntries(result.map(r => [r.entidadeId, r.count]));
 }

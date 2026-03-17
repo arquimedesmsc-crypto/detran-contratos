@@ -57,3 +57,15 @@
 - [x] Chips/tags de filtros ativos com botão de remoção individual
 - [x] Contador de resultados filtrados
 - [x] Botão "Limpar todos os filtros"
+- [x] Tabela de anexos no banco de dados (instrumentos e VPN)
+- [x] API tRPC: upload de anexos (zip, pdf, doc, txt — exceto exe/bat)
+- [x] API tRPC: download/listagem de anexos por instrumento
+- [x] API tRPC: exclusão de anexos
+- [x] Coluna ID (auto-incrementável, chave primária) visível na tabela de Instrumentos
+- [x] Renomear coluna "Número" para "N° do Convênio" na tabela de Instrumentos
+- [x] Coluna "Anexos" na tabela de Instrumentos com botão de download
+- [x] Ícones de ação (editar, excluir, anexar) na linha de cada Instrumento
+- [x] Ícones de ação (editar, excluir, anexar) na linha de cada VPN
+- [x] Limpar dados mockup de VPN do banco
+- [x] CRUD completo de VPN (adicionar, editar, excluir)
+- [x] Sistema de upload de anexos para VPN

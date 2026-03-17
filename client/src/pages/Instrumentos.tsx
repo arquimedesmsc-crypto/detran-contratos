@@ -3,32 +3,30 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Plus, Search, ChevronLeft, ChevronRight, ArrowUpDown, Eye, FileText, Filter, X, Download, Calendar, SlidersHorizontal } from "lucide-react";
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  Tooltip, TooltipContent, TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Plus, Search, ChevronLeft, ChevronRight, ArrowUpDown, Eye, FileText,
+  Filter, X, Download, Calendar, SlidersHorizontal, Pencil, Trash2, Paperclip,
+} from "lucide-react";
 import { useState, useMemo } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { getStatusInstrumento, formatDate } from "@/lib/utils-instrumentos";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { exportToCSV, exportToPDF, formatInstrumentosForExport } from "@/lib/export-utils";
+import { AnexosModal } from "@/components/AnexosModal";
+import { toast } from "sonner";
 
 const STATUS_OPTIONS = [
   { value: "all", label: "Todos os Status", color: "" },
@@ -44,11 +42,6 @@ function dateInputToTimestamp(value: string): number | undefined {
   return isNaN(d.getTime()) ? undefined : d.getTime();
 }
 
-function timestampToDateInput(ts: number | undefined): string {
-  if (!ts) return "";
-  return new Date(ts).toISOString().split("T")[0];
-}
-
 export default function Instrumentos() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
@@ -59,10 +52,10 @@ export default function Instrumentos() {
   const [diretoria, setDiretoria] = useState("all");
   const [tipo, setTipo] = useState("all");
   const [statusVigencia, setStatusVigencia] = useState("all");
-  const [dataInicioMin, setDataInicioMin] = useState<string>("");
-  const [dataInicioMax, setDataInicioMax] = useState<string>("");
-  const [dataTerminoMin, setDataTerminoMin] = useState<string>("");
-  const [dataTerminoMax, setDataTerminoMax] = useState<string>("");
+  const [dataInicioMin, setDataInicioMin] = useState("");
+  const [dataInicioMax, setDataInicioMax] = useState("");
+  const [dataTerminoMin, setDataTerminoMin] = useState("");
+  const [dataTerminoMax, setDataTerminoMax] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   // Paginação e ordenação
@@ -70,6 +63,12 @@ export default function Instrumentos() {
   const [sortBy, setSortBy] = useState("id");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const pageSize = 15;
+
+  // Modal de anexos
+  const [anexosModal, setAnexosModal] = useState<{ id: number; nome: string } | null>(null);
+
+  // Confirmação de exclusão
+  const [deleteConfirm, setDeleteConfirm] = useState<{ id: number; numero: string } | null>(null);
 
   // Debounce da busca
   const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
@@ -80,7 +79,6 @@ export default function Instrumentos() {
     setDebounceTimer(t);
   };
 
-  // Construir filtros para a query
   const queryFilters = useMemo(() => ({
     search: searchQuery || undefined,
     diretoria: diretoria !== "all" ? diretoria : undefined,
@@ -109,11 +107,28 @@ export default function Instrumentos() {
 
   const { data: diretorias } = trpc.instrumentos.diretorias.useQuery();
   const { data: tipos } = trpc.instrumentos.tipos.useQuery();
-  const { data, isLoading } = trpc.instrumentos.list.useQuery(queryFilters);
+  const { data, isLoading, refetch } = trpc.instrumentos.list.useQuery(queryFilters);
+
+  const utils = trpc.useUtils();
+  const deleteMutation = trpc.instrumentos.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Instrumento excluído com sucesso");
+      utils.instrumentos.list.invalidate();
+      utils.instrumentos.stats.invalidate();
+      setDeleteConfirm(null);
+    },
+    onError: () => toast.error("Erro ao excluir instrumento"),
+  });
+
+  // Contar anexos por instrumento
+  const itemIds = useMemo(() => (data?.items ?? []).map(i => i.id), [data?.items]);
+  const { data: anexosCounts } = trpc.anexos.countByIds.useQuery(
+    { entidadeTipo: "instrumento", entidadeIds: itemIds },
+    { enabled: itemIds.length > 0 }
+  );
 
   const totalPages = Math.ceil((data?.total ?? 0) / pageSize);
 
-  // Verificar filtros ativos
   const activeFilters = useMemo(() => {
     const filters: { key: string; label: string; onRemove: () => void }[] = [];
     if (searchQuery) filters.push({ key: "search", label: `Busca: "${searchQuery}"`, onRemove: () => { setSearch(""); setSearchQuery(""); setPage(1); } });
@@ -164,45 +179,30 @@ export default function Instrumentos() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Instrumentos</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Gerencie contratos, convênios e acordos de cooperação
-          </p>
+          <p className="text-sm text-muted-foreground mt-1">Gerencie contratos, convênios e acordos de cooperação</p>
         </div>
         <div className="flex gap-2 shrink-0 flex-wrap sm:flex-nowrap">
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1.5 h-9 text-xs sm:text-sm"
+          <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs sm:text-sm"
             onClick={() => {
               if (exportData && exportData.length > 0) {
-                const formatted = formatInstrumentosForExport(exportData);
-                exportToCSV(formatted, `instrumentos_${new Date().toISOString().split("T")[0]}`);
+                exportToCSV(formatInstrumentosForExport(exportData), `instrumentos_${new Date().toISOString().split("T")[0]}`);
               }
-            }}
-          >
+            }}>
             <Download className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Excel</span>
-            <span className="sm:hidden">XLS</span>
+            <span className="hidden sm:inline">Excel</span><span className="sm:hidden">XLS</span>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1.5 h-9 text-xs sm:text-sm"
+          <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs sm:text-sm"
             onClick={() => {
               if (exportData && exportData.length > 0) {
-                const formatted = formatInstrumentosForExport(exportData);
-                exportToPDF(formatted, `instrumentos_${new Date().toISOString().split("T")[0]}`, "Relatório de Instrumentos - DETRAN-RJ");
+                exportToPDF(formatInstrumentosForExport(exportData), `instrumentos_${new Date().toISOString().split("T")[0]}`, "Relatório de Instrumentos - DETRAN-RJ");
               }
-            }}
-          >
-            <FileText className="h-3.5 w-3.5" />
-            PDF
+            }}>
+            <FileText className="h-3.5 w-3.5" />PDF
           </Button>
           {user && (
             <Button onClick={() => setLocation("/instrumentos/novo")} className="gap-2 shrink-0 shadow-sm h-9 text-xs sm:text-sm">
               <Plus className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Novo</span>
-              <span className="sm:hidden">+</span>
+              <span className="hidden sm:inline">Novo</span><span className="sm:hidden">+</span>
             </Button>
           )}
         </div>
@@ -213,18 +213,12 @@ export default function Instrumentos() {
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar por número, partes, objeto ou processo SEI..."
-              className="pl-9 h-10"
-              value={search}
-              onChange={(e) => handleSearchChange(e.target.value)}
-            />
+            <Input placeholder="Buscar por número, partes, objeto ou processo SEI..." className="pl-9 h-10"
+              value={search} onChange={(e) => handleSearchChange(e.target.value)} />
           </div>
-          <Button
-            variant={showFilters ? "default" : "outline"}
+          <Button variant={showFilters ? "default" : "outline"}
             className={`h-10 gap-2 shrink-0 ${showFilters ? "" : "border-dashed"}`}
-            onClick={() => setShowFilters(!showFilters)}
-          >
+            onClick={() => setShowFilters(!showFilters)}>
             <SlidersHorizontal className="h-4 w-4" />
             <span className="hidden sm:inline text-sm">Filtros</span>
             {hasActiveFilters && (
@@ -235,135 +229,74 @@ export default function Instrumentos() {
           </Button>
         </div>
 
-        {/* Painel de Filtros Avançados */}
         {showFilters && (
           <Card className="border-primary/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Filter className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-semibold text-foreground">Filtros Avançados</span>
+                  <span className="text-sm font-semibold">Filtros Avançados</span>
                 </div>
                 {hasActiveFilters && (
                   <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground h-7 text-xs" onClick={clearAllFilters}>
-                    <X className="h-3 w-3" />
-                    Limpar todos
+                    <X className="h-3 w-3" />Limpar todos
                   </Button>
                 )}
               </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* Diretoria */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Diretoria</label>
                   <Select value={diretoria} onValueChange={(v) => { setDiretoria(v); setPage(1); }}>
-                    <SelectTrigger className="h-9">
-                      <SelectValue placeholder="Todas as diretorias" />
-                    </SelectTrigger>
+                    <SelectTrigger className="h-9"><SelectValue placeholder="Todas" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todas as Diretorias</SelectItem>
-                      {(diretorias ?? []).map((d) => (
-                        <SelectItem key={d} value={d}>{d}</SelectItem>
-                      ))}
+                      {(diretorias ?? []).map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
-
-                {/* Tipo */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Tipo de Instrumento</label>
+                  <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Tipo</label>
                   <Select value={tipo} onValueChange={(v) => { setTipo(v); setPage(1); }}>
-                    <SelectTrigger className="h-9">
-                      <SelectValue placeholder="Todos os tipos" />
-                    </SelectTrigger>
+                    <SelectTrigger className="h-9"><SelectValue placeholder="Todos" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todos os Tipos</SelectItem>
-                      {(tipos ?? []).map((t) => (
-                        <SelectItem key={t} value={t}>{t}</SelectItem>
-                      ))}
+                      {(tipos ?? []).map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
-
-                {/* Status de Vigência */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Status de Vigência</label>
                   <Select value={statusVigencia} onValueChange={(v) => { setStatusVigencia(v); setPage(1); }}>
-                    <SelectTrigger className="h-9">
-                      <SelectValue placeholder="Todos os status" />
-                    </SelectTrigger>
+                    <SelectTrigger className="h-9"><SelectValue placeholder="Todos" /></SelectTrigger>
                     <SelectContent>
-                      {STATUS_OPTIONS.map((opt) => (
+                      {STATUS_OPTIONS.map(opt => (
                         <SelectItem key={opt.value} value={opt.value}>
-                          <div className="flex items-center gap-2">
-                            {opt.value !== "all" && (
-                              <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${opt.color}`}>
-                                {opt.label}
-                              </span>
-                            )}
-                            {opt.value === "all" && opt.label}
-                          </div>
+                          {opt.value !== "all" ? (
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${opt.color}`}>{opt.label}</span>
+                          ) : opt.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-
-                {/* Data Início — intervalo */}
                 <div className="space-y-1.5 sm:col-span-2 lg:col-span-1">
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                    <Calendar className="h-3 w-3" />
-                    Data de Início
+                    <Calendar className="h-3 w-3" />Data de Início
                   </label>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1">
-                      <Input
-                        type="date"
-                        className="h-9 text-sm"
-                        placeholder="De"
-                        value={dataInicioMin}
-                        onChange={(e) => { setDataInicioMin(e.target.value); setPage(1); }}
-                      />
-                    </div>
+                    <Input type="date" className="h-9 text-sm flex-1" value={dataInicioMin} onChange={(e) => { setDataInicioMin(e.target.value); setPage(1); }} />
                     <span className="text-muted-foreground text-xs shrink-0">até</span>
-                    <div className="flex-1">
-                      <Input
-                        type="date"
-                        className="h-9 text-sm"
-                        placeholder="Até"
-                        value={dataInicioMax}
-                        onChange={(e) => { setDataInicioMax(e.target.value); setPage(1); }}
-                      />
-                    </div>
+                    <Input type="date" className="h-9 text-sm flex-1" value={dataInicioMax} onChange={(e) => { setDataInicioMax(e.target.value); setPage(1); }} />
                   </div>
                 </div>
-
-                {/* Data Término — intervalo */}
-                <div className="space-y-1.5 sm:col-span-2 lg:col-span-2">
+                <div className="space-y-1.5 sm:col-span-2">
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                    <Calendar className="h-3 w-3" />
-                    Data de Vencimento
+                    <Calendar className="h-3 w-3" />Data de Vencimento
                   </label>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1">
-                      <Input
-                        type="date"
-                        className="h-9 text-sm"
-                        placeholder="De"
-                        value={dataTerminoMin}
-                        onChange={(e) => { setDataTerminoMin(e.target.value); setPage(1); }}
-                      />
-                    </div>
+                    <Input type="date" className="h-9 text-sm flex-1" value={dataTerminoMin} onChange={(e) => { setDataTerminoMin(e.target.value); setPage(1); }} />
                     <span className="text-muted-foreground text-xs shrink-0">até</span>
-                    <div className="flex-1">
-                      <Input
-                        type="date"
-                        className="h-9 text-sm"
-                        placeholder="Até"
-                        value={dataTerminoMax}
-                        onChange={(e) => { setDataTerminoMax(e.target.value); setPage(1); }}
-                      />
-                    </div>
+                    <Input type="date" className="h-9 text-sm flex-1" value={dataTerminoMax} onChange={(e) => { setDataTerminoMax(e.target.value); setPage(1); }} />
                   </div>
                 </div>
               </div>
@@ -371,29 +304,18 @@ export default function Instrumentos() {
           </Card>
         )}
 
-        {/* Chips de filtros ativos */}
         {hasActiveFilters && (
           <div className="flex flex-wrap gap-1.5 items-center">
             <span className="text-xs text-muted-foreground font-medium">Filtros ativos:</span>
-            {activeFilters.map((f) => (
-              <Badge
-                key={f.key}
-                variant="secondary"
-                className="gap-1 text-xs font-normal pr-1 pl-2 h-6 cursor-default"
-              >
+            {activeFilters.map(f => (
+              <Badge key={f.key} variant="secondary" className="gap-1 text-xs font-normal pr-1 pl-2 h-6 cursor-default">
                 {f.label}
-                <button
-                  className="ml-0.5 rounded-full hover:bg-muted-foreground/20 p-0.5 transition-colors"
-                  onClick={f.onRemove}
-                >
+                <button className="ml-0.5 rounded-full hover:bg-muted-foreground/20 p-0.5 transition-colors" onClick={f.onRemove}>
                   <X className="h-2.5 w-2.5" />
                 </button>
               </Badge>
             ))}
-            <button
-              className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
-              onClick={clearAllFilters}
-            >
+            <button className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2" onClick={clearAllFilters}>
               Limpar todos
             </button>
           </div>
@@ -403,16 +325,10 @@ export default function Instrumentos() {
       {/* Results count */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {isLoading ? (
-            <span className="inline-block w-32 h-4 bg-muted rounded animate-pulse" />
-          ) : (
-            <>
-              <span className="font-semibold text-foreground">{data?.total ?? 0}</span>{" "}
-              instrumento{(data?.total ?? 0) !== 1 ? "s" : ""} encontrado{(data?.total ?? 0) !== 1 ? "s" : ""}
-              {hasActiveFilters && (
-                <span className="text-muted-foreground/70"> com os filtros aplicados</span>
-              )}
-            </>
+          {isLoading ? <span className="inline-block w-32 h-4 bg-muted rounded animate-pulse" /> : (
+            <><span className="font-semibold text-foreground">{data?.total ?? 0}</span>{" "}
+            instrumento{(data?.total ?? 0) !== 1 ? "s" : ""} encontrado{(data?.total ?? 0) !== 1 ? "s" : ""}
+            {hasActiveFilters && <span className="text-muted-foreground/70"> com os filtros aplicados</span>}</>
           )}
         </p>
       </div>
@@ -424,52 +340,50 @@ export default function Instrumentos() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/40 hover:bg-muted/40">
-                  <SortHeader col="numero" className="w-[110px]">N.º</SortHeader>
-                  <SortHeader col="tipo" className="w-[180px]">Tipo</SortHeader>
-                  <TableHead className="min-w-[200px]">Partes Envolvidas</TableHead>
-                  <SortHeader col="diretoria" className="w-[180px]">Diretoria</SortHeader>
-                  <SortHeader col="dataInicio" className="w-[110px]">Início</SortHeader>
-                  <SortHeader col="dataTermino" className="w-[120px]">Vencimento</SortHeader>
-                  <TableHead className="w-[130px]">Status</TableHead>
-                  <TableHead className="w-[50px]"></TableHead>
+                  <SortHeader col="id" className="w-[60px]">ID</SortHeader>
+                  <SortHeader col="numero" className="w-[130px]">N° Convênio</SortHeader>
+                  <SortHeader col="tipo" className="w-[160px]">Tipo</SortHeader>
+                  <TableHead className="min-w-[180px]">Partes Envolvidas</TableHead>
+                  <SortHeader col="diretoria" className="w-[160px]">Diretoria</SortHeader>
+                  <SortHeader col="dataInicio" className="w-[100px]">Início</SortHeader>
+                  <SortHeader col="dataTermino" className="w-[110px]">Vencimento</SortHeader>
+                  <TableHead className="w-[120px]">Status</TableHead>
+                  <TableHead className="w-[70px] text-center">Anexos</TableHead>
+                  <TableHead className="w-[110px] text-center">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   [...Array(8)].map((_, i) => (
                     <TableRow key={i}>
-                      {[...Array(8)].map((_, j) => (
+                      {[...Array(10)].map((_, j) => (
                         <TableCell key={j}><div className="h-4 bg-muted rounded animate-pulse" /></TableCell>
                       ))}
                     </TableRow>
                   ))
                 ) : (data?.items ?? []).length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-16">
+                    <TableCell colSpan={10} className="text-center py-16">
                       <div className="flex flex-col items-center gap-3">
                         <FileText className="h-10 w-10 text-muted-foreground/30" />
                         <p className="text-muted-foreground">Nenhum instrumento encontrado</p>
-                        {hasActiveFilters && (
-                          <Button variant="outline" size="sm" onClick={clearAllFilters}>Limpar filtros</Button>
-                        )}
+                        {hasActiveFilters && <Button variant="outline" size="sm" onClick={clearAllFilters}>Limpar filtros</Button>}
                       </div>
                     </TableCell>
                   </TableRow>
                 ) : (
                   (data?.items ?? []).map((item) => {
                     const status = getStatusInstrumento(item.dataTermino);
+                    const numAnexos = (anexosCounts as Record<number, number>)?.[item.id] ?? 0;
                     return (
-                      <TableRow
-                        key={item.id}
-                        className="cursor-pointer hover:bg-muted/30 transition-colors group"
-                        onClick={() => setLocation(`/instrumentos/${item.id}`)}
-                      >
-                        <TableCell className="font-semibold text-sm text-primary">{item.numero}</TableCell>
+                      <TableRow key={item.id} className="hover:bg-muted/20 transition-colors group">
+                        <TableCell className="text-xs text-muted-foreground font-mono">{item.id}</TableCell>
+                        <TableCell className="font-semibold text-sm text-primary whitespace-nowrap">{item.numero}</TableCell>
                         <TableCell className="text-sm">{item.tipo}</TableCell>
-                        <TableCell className="text-sm max-w-[300px]">
+                        <TableCell className="text-sm max-w-[220px]">
                           <span className="line-clamp-2">{item.partesEnvolvidas}</span>
                         </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
+                        <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
                           {item.diretoria.replace("Diretoria de ", "")}
                         </TableCell>
                         <TableCell className="text-sm tabular-nums text-muted-foreground">{formatDate(item.dataInicio)}</TableCell>
@@ -480,15 +394,67 @@ export default function Instrumentos() {
                             {status.label}
                           </Badge>
                         </TableCell>
+                        {/* Coluna Anexos */}
+                        <TableCell className="text-center">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className={`h-7 gap-1 text-xs ${numAnexos > 0 ? "text-primary hover:text-primary" : "text-muted-foreground/50"}`}
+                                onClick={() => setAnexosModal({ id: item.id, nome: item.numero })}
+                              >
+                                <Paperclip className="h-3.5 w-3.5" />
+                                {numAnexos > 0 && <span className="font-semibold">{numAnexos}</span>}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{numAnexos > 0 ? `${numAnexos} anexo${numAnexos !== 1 ? "s" : ""}` : "Sem anexos"}</TooltipContent>
+                          </Tooltip>
+                        </TableCell>
+                        {/* Coluna Ações */}
                         <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={(e) => { e.stopPropagation(); setLocation(`/instrumentos/${item.id}`); }}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
+                          <div className="flex items-center justify-center gap-0.5">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                                  onClick={() => setLocation(`/instrumentos/${item.id}`)}>
+                                  <Eye className="h-3.5 w-3.5" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Visualizar</TooltipContent>
+                            </Tooltip>
+                            {user && (
+                              <>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary"
+                                      onClick={() => setLocation(`/instrumentos/${item.id}/editar`)}>
+                                      <Pencil className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Editar</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary"
+                                      onClick={() => setAnexosModal({ id: item.id, nome: item.numero })}>
+                                      <Paperclip className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Gerenciar Anexos</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                                      onClick={() => setDeleteConfirm({ id: item.id, numero: item.numero })}>
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Excluir</TooltipContent>
+                                </Tooltip>
+                              </>
+                            )}
+                          </div>
                         </TableCell>
                       </TableRow>
                     );
@@ -517,24 +483,20 @@ export default function Instrumentos() {
             <CardContent className="p-8 text-center">
               <FileText className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
               <p className="text-muted-foreground">Nenhum instrumento encontrado</p>
-              {hasActiveFilters && (
-                <Button variant="outline" size="sm" className="mt-3" onClick={clearAllFilters}>Limpar filtros</Button>
-              )}
+              {hasActiveFilters && <Button variant="outline" size="sm" className="mt-3" onClick={clearAllFilters}>Limpar filtros</Button>}
             </CardContent>
           </Card>
         ) : (
           (data?.items ?? []).map((item) => {
             const status = getStatusInstrumento(item.dataTermino);
+            const numAnexos = (anexosCounts as Record<number, number>)?.[item.id] ?? 0;
             return (
-              <Card
-                key={item.id}
-                className="cursor-pointer hover:shadow-md transition-shadow active:scale-[0.99]"
-                onClick={() => setLocation(`/instrumentos/${item.id}`)}
-              >
+              <Card key={item.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-[10px] text-muted-foreground font-mono">#{item.id}</span>
                         <span className="font-semibold text-sm text-primary">{item.numero}</span>
                         <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${status.bgColor} ${status.color} border`}>
                           <span className={`w-1 h-1 rounded-full ${status.dotColor} mr-1`} />
@@ -544,15 +506,35 @@ export default function Instrumentos() {
                       <p className="text-xs text-muted-foreground mb-1">{item.tipo}</p>
                       <p className="text-sm line-clamp-2 leading-relaxed">{item.partesEnvolvidas}</p>
                     </div>
-                    <Eye className="h-4 w-4 text-muted-foreground/40 shrink-0 mt-1" />
                   </div>
                   <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                    <span className="text-xs text-muted-foreground">
-                      {item.diretoria.replace("Diretoria de ", "")}
-                    </span>
+                    <span className="text-xs text-muted-foreground">{item.diretoria.replace("Diretoria de ", "")}</span>
                     <span className="text-xs tabular-nums text-muted-foreground">
                       {item.dataTermino ? `Vence: ${formatDate(item.dataTermino)}` : "Sem data"}
                     </span>
+                  </div>
+                  <div className="flex items-center gap-1 mt-2 pt-2 border-t">
+                    <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs flex-1"
+                      onClick={() => setLocation(`/instrumentos/${item.id}`)}>
+                      <Eye className="h-3 w-3" />Ver
+                    </Button>
+                    {user && (
+                      <>
+                        <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs flex-1"
+                          onClick={() => setLocation(`/instrumentos/${item.id}/editar`)}>
+                          <Pencil className="h-3 w-3" />Editar
+                        </Button>
+                        <Button variant="ghost" size="sm" className={`h-7 gap-1 text-xs flex-1 ${numAnexos > 0 ? "text-primary" : ""}`}
+                          onClick={() => setAnexosModal({ id: item.id, nome: item.numero })}>
+                          <Paperclip className="h-3 w-3" />
+                          {numAnexos > 0 ? `${numAnexos} anexo${numAnexos !== 1 ? "s" : ""}` : "Anexos"}
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs text-destructive flex-1"
+                          onClick={() => setDeleteConfirm({ id: item.id, numero: item.numero })}>
+                          <Trash2 className="h-3 w-3" />Excluir
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -586,6 +568,39 @@ export default function Instrumentos() {
           </div>
         </div>
       )}
+
+      {/* Modal de Anexos */}
+      {anexosModal && (
+        <AnexosModal
+          open={!!anexosModal}
+          onClose={() => setAnexosModal(null)}
+          entidadeTipo="instrumento"
+          entidadeId={anexosModal.id}
+          entidadeNome={anexosModal.nome}
+        />
+      )}
+
+      {/* Confirmação de exclusão */}
+      <AlertDialog open={!!deleteConfirm} onOpenChange={(v) => !v && setDeleteConfirm(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir instrumento?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir o instrumento <strong>{deleteConfirm?.numero}</strong>?
+              Esta ação não pode ser desfeita e todos os termos aditivos e anexos associados serão removidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => deleteConfirm && deleteMutation.mutate({ id: deleteConfirm.id })}
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

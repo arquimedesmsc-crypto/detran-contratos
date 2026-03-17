@@ -61,3 +61,22 @@ export const vpnConexoes = mysqlTable("vpn_conexoes", {
 
 export type VpnConexao = typeof vpnConexoes.$inferSelect;
 export type InsertVpnConexao = typeof vpnConexoes.$inferInsert;
+
+// Tabela de anexos — usada tanto por instrumentos quanto por VPN
+export const anexos = mysqlTable("anexos", {
+  id: int("id").autoincrement().primaryKey(),
+  // Tipo de entidade: "instrumento" ou "vpn"
+  entidadeTipo: mysqlEnum("entidadeTipo", ["instrumento", "vpn"]).notNull(),
+  entidadeId: int("entidadeId").notNull(),
+  nomeOriginal: varchar("nomeOriginal", { length: 512 }).notNull(),
+  nomeArquivo: varchar("nomeArquivo", { length: 512 }).notNull(),
+  mimeType: varchar("mimeType", { length: 128 }).notNull(),
+  tamanho: bigint("tamanho", { mode: "number" }).notNull(),
+  s3Key: varchar("s3Key", { length: 1024 }).notNull(),
+  s3Url: text("s3Url").notNull(),
+  uploadedBy: varchar("uploadedBy", { length: 64 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Anexo = typeof anexos.$inferSelect;
+export type InsertAnexo = typeof anexos.$inferInsert;
