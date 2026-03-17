@@ -92,3 +92,7 @@
 - [x] Botão de instalar com confirmação de instalação
 - [x] Design responsivo com bordas arredondadas e degradê
 - [x] Adicionar "Download" na sidebar lateral do DashboardLayout
+- [x] Gerar logo DETRAN-RJ "D" em alta resolução com nano banana
+- [x] Gerar favicon.ico a partir da logo gerada
+- [x] Gerar ícones PWA 192x192 e 512x512 a partir da logo gerada
+- [x] Implementar splash screen animada com logo, efeito de carregamento e transições
