@@ -107,3 +107,8 @@
 - [x] Atualizar todo.md e criar CHANGELOG.md
 - [x] Garantir harmonia entre código e documentação
 - [x] Sincronizar repositório GitHub
+- [x] Analisar código atual: extrair padrões de design, componentes, cores, efeitos, stack
+- [x] Criar Design System completo (paleta, tipografia, componentes, cards, sidebar, efeitos)
+- [x] Criar Coding Standards (backend tRPC/Drizzle/testes, frontend React/Tailwind/shadcn)
+- [x] Criar skill reutilizável (SKILL.md) para Manus e instruções para Claude Code
+- [x] Atualizar README e sincronizar repositório GitHub

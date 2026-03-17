@@ -4,6 +4,21 @@ Todas as alterações relevantes deste projeto são documentadas neste arquivo, 
 
 ---
 
+## [1.4.0] — 2026-03-17
+
+### ✨ Adicionado
+- **Skill `detran-design-system`** reutilizável para Manus e Claude Code, contendo Design System completo, Coding Standards e templates CSS
+- **Referência de Design System** (`references/design-system.md`) com paleta, degradês, tipografia, componentes, animações e responsividade
+- **Referência de Coding Standards** (`references/coding-standards.md`) com padrões de backend, frontend, testes e convenções
+- **Instruções para Claude Code** (`references/claude-code-instructions.md`) com template CLAUDE.md e checklist de novo projeto
+- **Template `index.css`** com tema DETRAN completo (CSS variables OKLCH, degradês, utilities) pronto para copiar em novos projetos
+
+### 📝 Documentação
+- CHANGELOG.md atualizado com versão 1.4.0
+- todo.md atualizado com 115 itens rastreados (todos concluídos)
+
+---
+
 ## [1.3.0] — 2026-03-17
 
 ### ✨ Adicionado
