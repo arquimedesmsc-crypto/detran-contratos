@@ -84,3 +84,11 @@
 - [x] Hierarquia visual com tipografia em azul e verde
 - [x] Paleta colorida mantendo identidade oficial em todas as páginas
 - [x] Remover fundo branco da logo quando necessário
+- [x] Configurar manifest.json para PWA (nome, ícones, cores DETRAN)
+- [x] Configurar service worker para instalação PWA
+- [x] Adicionar meta tags PWA no index.html
+- [x] Criar página de Download com identidade visual DETRAN-RJ
+- [x] Banner automático de instalação PWA ao entrar na página
+- [x] Botão de instalar com confirmação de instalação
+- [x] Design responsivo com bordas arredondadas e degradê
+- [x] Adicionar "Download" na sidebar lateral do DashboardLayout

@@ -11,6 +11,7 @@ import InstrumentoDetalhes from "./pages/InstrumentoDetalhes";
 import InstrumentoForm from "./pages/InstrumentoForm";
 import Vpn from "./pages/Vpn";
 import VpnDetalhes from "./pages/VpnDetalhes";
+import Download from "./pages/Download";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/instrumentos/:id" component={InstrumentoDetalhes} />
         <Route path="/vpn" component={Vpn} />
         <Route path="/vpn/:id" component={VpnDetalhes} />
+        <Route path="/download" component={Download} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

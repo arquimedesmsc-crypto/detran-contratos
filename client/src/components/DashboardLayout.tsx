@@ -27,6 +27,7 @@ import {
   PanelLeft,
   FileText,
   Shield,
+  Smartphone,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -40,6 +41,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: FileText, label: "Instrumentos", path: "/instrumentos" },
   { icon: Shield, label: "VPN", path: "/vpn" },
+  { icon: Smartphone, label: "Download", path: "/download" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
