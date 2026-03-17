@@ -1,0 +1,43 @@
+{
+  "query": "\n-- Quantos instrumentos ainda sem data de início\nSELECT COUNT(*) as sem_data_inicio FROM instrumentos WHERE dataInicio IS NULL;\n\n-- Quantos instrumentos sem data de término\nSELECT COUNT(*) as sem_data_termino FROM instrumentos WHERE dataTermino IS NULL;\n\n-- Distribuição de status de vigência\nSELECT \n  CASE \n    WHEN dataTermino IS NULL THEN 'Sem Data'\n    WHEN dataTermino < UNIX_TIMESTAMP() * 1000 THEN 'Vencido'\n    WHEN dataTermino < (UNIX_TIMESTAMP() + 15552000) * 1000 THEN 'Próximo do Vencimento'\n    ELSE 'Vigente'\n  END as status,\n  COUNT(*) as total\nFROM instrumentos\nGROUP BY status;\n\n-- Verificar os 2 que ainda não têm data\nSELECT id, numero, tipo, diretoria FROM instrumentos WHERE dataInicio IS NULL;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute \n-- Quantos instrumentos ainda sem data de início\nSELECT COUNT(*) as sem_data_inicio FROM instrumentos WHERE dataInicio IS NULL;\n\n-- Quantos instrumentos sem data de término\nSELECT COUNT(*) as sem_data_termino FROM instrumentos WHERE dataTermino IS NULL;\n\n-- Distribuição de status de vigência\nSELECT \n  CASE \n    WHEN dataTermino IS NULL THEN 'Sem Data'\n    WHEN dataTermino < UNIX_TIMESTAMP() * 1000 THEN 'Vencido'\n    WHEN dataTermino < (UNIX_TIMESTAMP() + 15552000) * 1000 THEN 'Próximo do Vencimento'\n    ELSE 'Vigente'\n  END as status,\n  COUNT(*) as total\nFROM instrumentos\nGROUP BY status;\n\n-- Verificar os 2 que ainda não têm data\nSELECT id, numero, tipo, diretoria FROM instrumentos WHERE dataInicio IS NULL;\n",
+  "rows": [
+    {
+      "sem_data_inicio": "2"
+    },
+    {
+      "sem_data_inicio": "sem_data_termino"
+    },
+    {
+      "sem_data_inicio": "2"
+    },
+    {
+      "sem_data_inicio": "status\ttotal"
+    },
+    {
+      "sem_data_inicio": "Sem Data\t2"
+    },
+    {
+      "sem_data_inicio": "Vigente\t46"
+    },
+    {
+      "sem_data_inicio": "Próximo do Vencimento\t4"
+    },
+    {
+      "sem_data_inicio": "Vencido\t5"
+    },
+    {
+      "sem_data_inicio": "id\tnumero\ttipo\tdiretoria"
+    },
+    {
+      "sem_data_inicio": "11\t016/2022\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil"
+    },
+    {
+      "sem_data_inicio": "45\t332/2025\tTermo de Cooperação Técnica\tDiretoria de Identificação Civil"
+    }
+  ],
+  "messages": [],
+  "stdout": "sem_data_inicio\n2\nsem_data_termino\n2\nstatus\ttotal\nSem Data\t2\nVigente\t46\nPróximo do Vencimento\t4\nVencido\t5\nid\tnumero\ttipo\tdiretoria\n11\t016/2022\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\n45\t332/2025\tTermo de Cooperação Técnica\tDiretoria de Identificação Civil\n",
+  "stderr": "",
+  "execution_time_ms": 121
+}

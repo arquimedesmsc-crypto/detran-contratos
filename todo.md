@@ -69,3 +69,9 @@
 - [x] Limpar dados mockup de VPN do banco
 - [x] CRUD completo de VPN (adicionar, editar, excluir)
 - [x] Sistema de upload de anexos para VPN
+- [ ] Auditoria completa: verificar datas de assinatura faltantes
+- [ ] Auditoria completa: padronizar números/nomes dos contratos
+- [ ] Auditoria completa: criar identificação única para cada contrato
+- [ ] Auditoria completa: cruzar dados do banco vs PDFs originais
+- [ ] Auditoria completa: corrigir dados inconsistentes no banco
+- [ ] Relatório de auditoria detalhado
