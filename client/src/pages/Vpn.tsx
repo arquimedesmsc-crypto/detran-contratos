@@ -193,44 +193,57 @@ export default function Vpn() {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Shield className="h-6 w-6 text-primary" />
-            VPN
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Gerencie conexões e usuários da rede privada virtual
-          </p>
+      {/* Header com degradê DETRAN */}
+      <div className="rounded-xl p-5 sm:p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B4F72 0%, #1A73C4 50%, #1B8A5A 100%)' }}>
+        <div className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <Shield className="h-5 w-5 text-white/80" />
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight">VPN</h1>
+            </div>
+            <p className="text-sm text-white/70 ml-7">
+              Gerencie conexões e usuários da rede privada virtual
+            </p>
+          </div>
+          {user && (
+            <Button
+              className="gap-2 shadow-lg h-9 text-sm shrink-0 text-white font-semibold"
+              style={{ background: 'linear-gradient(135deg, #1B8A5A, #2E9D6A)' }}
+              onClick={() => { setEditingId(null); setFormData(EMPTY_FORM); setFormOpen(true); }}
+            >
+              <Plus className="h-4 w-4" />Nova Conexão
+            </Button>
+          )}
         </div>
-        {user && (
-          <Button
-            className="gap-2 shadow-sm h-9 text-sm shrink-0"
-            onClick={() => { setEditingId(null); setFormData(EMPTY_FORM); setFormOpen(true); }}
-          >
-            <Plus className="h-4 w-4" />Nova Conexão
-          </Button>
-        )}
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards com degradê */}
       <div className="grid grid-cols-3 gap-3">
-        {[
-          { label: "Total", value: stats?.total ?? 0, icon: <Server className="h-4 w-4" />, color: "text-primary", border: "border-l-primary" },
-          { label: "Conectados", value: stats?.conectadas ?? 0, icon: <Wifi className="h-4 w-4" />, color: "text-green-600", border: "border-l-green-500" },
-          { label: "Desconectados", value: stats?.desconectadas ?? 0, icon: <WifiOff className="h-4 w-4" />, color: "text-muted-foreground", border: "border-l-gray-400" },
-        ].map((s) => (
-          <Card key={s.label} className={`border-l-4 ${s.border} hover:shadow-md transition-shadow`}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs text-muted-foreground font-medium">{s.label}</span>
-                <span className={s.color}>{s.icon}</span>
-              </div>
-              <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-            </CardContent>
-          </Card>
-        ))}
+        <div className="rounded-xl p-4 text-white shadow-lg relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1A73C4 0%, #2196F3 100%)' }}>
+          <div className="absolute top-0 right-0 w-16 h-16 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+          <div className="flex items-center justify-between mb-1 relative z-10">
+            <span className="text-xs text-white/80 font-medium">Total</span>
+            <Server className="h-4 w-4 text-white/70" />
+          </div>
+          <p className="text-2xl font-bold relative z-10">{stats?.total ?? 0}</p>
+        </div>
+        <div className="rounded-xl p-4 text-white shadow-lg relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B8A5A 0%, #4CAF50 100%)' }}>
+          <div className="absolute top-0 right-0 w-16 h-16 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+          <div className="flex items-center justify-between mb-1 relative z-10">
+            <span className="text-xs text-white/80 font-medium">Conectados</span>
+            <Wifi className="h-4 w-4 text-white/70" />
+          </div>
+          <p className="text-2xl font-bold relative z-10">{stats?.conectadas ?? 0}</p>
+        </div>
+        <div className="rounded-xl p-4 text-white shadow-lg relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #64748B 0%, #94A3B8 100%)' }}>
+          <div className="absolute top-0 right-0 w-16 h-16 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+          <div className="flex items-center justify-between mb-1 relative z-10">
+            <span className="text-xs text-white/80 font-medium">Desconectados</span>
+            <WifiOff className="h-4 w-4 text-white/70" />
+          </div>
+          <p className="text-2xl font-bold relative z-10">{stats?.desconectadas ?? 0}</p>
+        </div>
       </div>
 
       {/* Search + Filter */}
@@ -283,11 +296,11 @@ export default function Vpn() {
       {/* Desktop Table */}
       {(isLoading || sorted.length > 0) && (
         <div className="hidden md:block">
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden border-0 shadow-sm">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-muted/40 hover:bg-muted/40">
+                  <TableRow className="hover:bg-transparent" style={{ background: 'linear-gradient(90deg, rgba(26,115,196,0.08) 0%, rgba(27,138,90,0.08) 100%)' }}>
                     <SortHeader col="id" className="w-[60px]">ID</SortHeader>
                     <SortHeader col="nomeUsuario" className="min-w-[160px]">Usuário</SortHeader>
                     <SortHeader col="matricula" className="w-[110px]">Matrícula</SortHeader>

@@ -175,14 +175,19 @@ export default function Instrumentos() {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Header com degradê DETRAN */}
+      <div className="rounded-xl p-5 sm:p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B4F72 0%, #1A73C4 50%, #1B8A5A 100%)' }}>
+        <div className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Instrumentos</h1>
-          <p className="text-sm text-muted-foreground mt-1">Gerencie contratos, convênios e acordos de cooperação</p>
+          <div className="flex items-center gap-2 mb-1">
+            <FileText className="h-5 w-5 text-white/80" />
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Instrumentos</h1>
+          </div>
+          <p className="text-sm text-white/70 ml-7">Gerencie contratos, convênios e acordos de cooperação</p>
         </div>
         <div className="flex gap-2 shrink-0 flex-wrap sm:flex-nowrap">
-          <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs sm:text-sm"
+          <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs sm:text-sm bg-white/15 border-white/30 text-white hover:bg-white/25 hover:text-white"
             onClick={() => {
               if (exportData && exportData.length > 0) {
                 exportToCSV(formatInstrumentosForExport(exportData), `instrumentos_${new Date().toISOString().split("T")[0]}`);
@@ -191,7 +196,7 @@ export default function Instrumentos() {
             <Download className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Excel</span><span className="sm:hidden">XLS</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs sm:text-sm"
+          <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs sm:text-sm bg-white/15 border-white/30 text-white hover:bg-white/25 hover:text-white"
             onClick={() => {
               if (exportData && exportData.length > 0) {
                 exportToPDF(formatInstrumentosForExport(exportData), `instrumentos_${new Date().toISOString().split("T")[0]}`, "Relatório de Instrumentos - DETRAN-RJ");
@@ -200,11 +205,12 @@ export default function Instrumentos() {
             <FileText className="h-3.5 w-3.5" />PDF
           </Button>
           {user && (
-            <Button onClick={() => setLocation("/instrumentos/novo")} className="gap-2 shrink-0 shadow-sm h-9 text-xs sm:text-sm">
+            <Button onClick={() => setLocation("/instrumentos/novo")} className="gap-2 shrink-0 shadow-lg h-9 text-xs sm:text-sm text-white font-semibold" style={{ background: 'linear-gradient(135deg, #1B8A5A, #2E9D6A)' }}>
               <Plus className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Novo</span><span className="sm:hidden">+</span>
             </Button>
           )}
+        </div>
         </div>
       </div>
 
@@ -230,7 +236,7 @@ export default function Instrumentos() {
         </div>
 
         {showFilters && (
-          <Card className="border-primary/20 shadow-sm">
+          <Card className="border-0 shadow-md" style={{ borderTop: '3px solid #1A73C4' }}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -335,11 +341,11 @@ export default function Instrumentos() {
 
       {/* Desktop Table */}
       <div className="hidden md:block">
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden border-0 shadow-sm">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/40 hover:bg-muted/40">
+                <TableRow className="hover:bg-transparent" style={{ background: 'linear-gradient(90deg, rgba(26,115,196,0.08) 0%, rgba(27,138,90,0.08) 100%)' }}>
                   <SortHeader col="id" className="w-[60px]">ID</SortHeader>
                   <SortHeader col="numero" className="w-[130px]">N° Convênio</SortHeader>
                   <SortHeader col="tipo" className="w-[160px]">Tipo</SortHeader>
@@ -491,7 +497,7 @@ export default function Instrumentos() {
             const status = getStatusInstrumento(item.dataTermino);
             const numAnexos = (anexosCounts as Record<number, number>)?.[item.id] ?? 0;
             return (
-              <Card key={item.id} className="hover:shadow-md transition-shadow">
+              <Card key={item.id} className="hover:shadow-md transition-shadow border-0 shadow-sm">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">

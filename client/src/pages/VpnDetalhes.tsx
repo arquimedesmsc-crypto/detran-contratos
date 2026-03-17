@@ -144,36 +144,36 @@ export default function VpnDetalhes() {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 shrink-0 mt-0.5 rounded-lg"
-            onClick={() => setLocation("/vpn")}
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                {conexao.nomeUsuario}
-              </h1>
-              <Badge
-                variant="outline"
-                className={`text-xs font-medium ${st.bgColor} ${st.color} ${st.borderColor} px-2.5 py-0.5`}
-              >
-                <span
-                  className={`w-2 h-2 rounded-full ${st.dotColor} mr-1.5 animate-${conexao.status === "conectado" ? "pulse" : "none"}`}
-                />
-                {st.label}
-              </Badge>
+      {/* Header com degradê DETRAN */}
+      <div className="rounded-xl p-5 sm:p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B4F72 0%, #1A73C4 50%, #1B8A5A 100%)' }}>
+        <div className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 relative z-10">
+          <div className="flex items-start gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 shrink-0 mt-0.5 rounded-lg text-white hover:bg-white/15"
+              onClick={() => setLocation("/vpn")}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+                  {conexao.nomeUsuario}
+                </h1>
+                <Badge className="text-xs font-medium border-0 px-2.5 py-0.5 bg-white/20 text-white">
+                  <span
+                    className={`w-2 h-2 rounded-full ${st.dotColor} mr-1.5 animate-${conexao.status === "conectado" ? "pulse" : "none"}`}
+                  />
+                  {st.label}
+                </Badge>
+              </div>
+              <p className="text-sm text-white/70 mt-1 flex items-center gap-1.5">
+                <Building2 className="h-3.5 w-3.5" />
+                {conexao.diretoria || "Diretoria não informada"}
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
-              <Building2 className="h-3.5 w-3.5" />
-              {conexao.diretoria || "Diretoria não informada"}
-            </p>
           </div>
         </div>
       </div>
@@ -220,8 +220,8 @@ export default function VpnDetalhes() {
           <Card className="shadow-sm">
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-                <div className="h-7 w-7 rounded-lg bg-[#005A92]/10 flex items-center justify-center">
-                  <User className="h-3.5 w-3.5 text-[#005A92]" />
+                <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
+                  <User className="h-3.5 w-3.5 text-white" />
                 </div>
                 Dados do Usuário
               </CardTitle>
@@ -257,8 +257,8 @@ export default function VpnDetalhes() {
           <Card className="shadow-sm">
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-                <div className="h-7 w-7 rounded-lg bg-[#005A92]/10 flex items-center justify-center">
-                  <Network className="h-3.5 w-3.5 text-[#005A92]" />
+                <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
+                  <Network className="h-3.5 w-3.5 text-white" />
                 </div>
                 Dados de Rede
               </CardTitle>
@@ -288,8 +288,8 @@ export default function VpnDetalhes() {
           <Card className="shadow-sm">
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-                <div className="h-7 w-7 rounded-lg bg-[#005A92]/10 flex items-center justify-center">
-                  <Activity className="h-3.5 w-3.5 text-[#005A92]" />
+                <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
+                  <Activity className="h-3.5 w-3.5 text-white" />
                 </div>
                 Tráfego de Dados
               </CardTitle>

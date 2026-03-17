@@ -10,6 +10,8 @@ import {
   Calendar,
   BarChart3,
   PieChartIcon,
+  TrendingUp,
+  ArrowRight,
 } from "lucide-react";
 import {
   BarChart,
@@ -27,22 +29,28 @@ import {
 import { getStatusInstrumento, formatDate } from "@/lib/utils-instrumentos";
 import { useLocation } from "wouter";
 
-/* Cores oficiais do manual de marca do Estado do RJ */
+/* Paleta DETRAN-RJ */
+const DETRAN_BLUE = "#1A73C4";
+const DETRAN_GREEN = "#1B8A5A";
+const DETRAN_BLUE_DARK = "#1B4F72";
+const DETRAN_TEAL = "#17A2B8";
+const DETRAN_GOLD = "#D4A017";
+
 const PIE_COLORS = [
-  "#005A92", /* Azul oficial */
-  "#427842", /* Verde oficial */
-  "#BC9D32", /* Dourado oficial */
-  "#7B5EA7", /* Roxo complementar */
-  "#A0A0A0", /* Cinza oficial */
-  "#2D7D9A", /* Azul turquesa */
-  "#8B6914", /* Dourado escuro */
+  DETRAN_BLUE,
+  DETRAN_GREEN,
+  DETRAN_TEAL,
+  DETRAN_GOLD,
+  "#7B5EA7",
+  "#E67E22",
+  "#34495E",
 ];
 
 const STATUS_COLORS = {
-  vigentes: "#427842",       /* Verde oficial */
-  proximoVencimento: "#BC9D32", /* Dourado oficial */
-  vencidos: "#C53030",       /* Vermelho */
-  semData: "#A0A0A0",        /* Cinza oficial */
+  vigentes: DETRAN_GREEN,
+  proximoVencimento: DETRAN_GOLD,
+  vencidos: "#DC2626",
+  semData: "#94A3B8",
 };
 
 export default function Home() {
@@ -52,15 +60,16 @@ export default function Home() {
 
   if (statsLoading) {
     return (
-      <div className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">Visão geral dos instrumentos jurídicos</p>
+      <div className="space-y-6">
+        {/* Header skeleton */}
+        <div className="rounded-xl p-6 animate-pulse" style={{ background: 'linear-gradient(135deg, #1B4F72, #1A73C4, #1B8A5A)', minHeight: 100 }}>
+          <div className="h-6 w-48 bg-white/20 rounded mb-2" />
+          <div className="h-4 w-72 bg-white/10 rounded" />
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="p-4 sm:p-5"><div className="h-16 bg-muted rounded" /></CardContent>
+              <CardContent className="p-5"><div className="h-20 bg-muted rounded-lg" /></CardContent>
             </Card>
           ))}
         </div>
@@ -68,7 +77,6 @@ export default function Home() {
     );
   }
 
-  // Calcular stats a partir dos alertas e total
   const vigentes = (stats?.total ?? 0) - (alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now()).length ?? 0) - (alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now() + 180 * 24 * 60 * 60 * 1000 && a.dataTermino >= Date.now()).length ?? 0);
   const proximoVencimento = alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now() + 180 * 24 * 60 * 60 * 1000 && a.dataTermino >= Date.now()).length ?? 0;
   const vencidos = alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now()).length ?? 0;
@@ -84,81 +92,95 @@ export default function Home() {
   const prazoMedioAnos = "4.0";
 
   return (
-    <div className="space-y-5">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Visão geral dos instrumentos jurídicos do DETRAN-RJ
-        </p>
+    <div className="space-y-6">
+      {/* Header com degradê DETRAN */}
+      <div
+        className="rounded-xl p-5 sm:p-6 text-white relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #1B4F72 0%, #1A73C4 50%, #1B8A5A 100%)' }}
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+        <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-5" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(-20%, 30%)' }} />
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-1">
+            <TrendingUp className="h-6 w-6 text-white/80" />
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Dashboard</h1>
+          </div>
+          <p className="text-sm text-white/70 ml-9">
+            Visão geral dos instrumentos jurídicos do DETRAN-RJ
+          </p>
+        </div>
       </div>
 
-      {/* KPI Cards */}
+      {/* KPI Cards com degradê */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <Card className="border-l-4 border-l-[#005A92]">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Total</p>
-                <p className="text-2xl sm:text-3xl font-bold text-foreground mt-0.5">{stats?.total ?? 0}</p>
-              </div>
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#005A92]/10 flex items-center justify-center shrink-0">
-                <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-[#005A92]" />
-              </div>
+        {/* Total */}
+        <div className="rounded-xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1A73C4 0%, #2196F3 100%)' }}>
+          <div className="absolute top-0 right-0 w-20 h-20 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+          <div className="flex items-center justify-between gap-2 relative z-10">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-white/80 truncate">Total</p>
+              <p className="text-2xl sm:text-3xl font-bold mt-1">{stats?.total ?? 0}</p>
+              <p className="text-[10px] text-white/60 mt-1">instrumentos</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-white/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
+              <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </div>
+          </div>
+        </div>
 
-        <Card className="border-l-4 border-l-[#427842]">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Vigentes</p>
-                <p className="text-2xl sm:text-3xl font-bold text-[#427842] mt-0.5">{vigentes}</p>
-              </div>
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#427842]/10 flex items-center justify-center shrink-0">
-                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-[#427842]" />
-              </div>
+        {/* Vigentes */}
+        <div className="rounded-xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B8A5A 0%, #4CAF50 100%)' }}>
+          <div className="absolute top-0 right-0 w-20 h-20 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+          <div className="flex items-center justify-between gap-2 relative z-10">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-white/80 truncate">Vigentes</p>
+              <p className="text-2xl sm:text-3xl font-bold mt-1">{vigentes}</p>
+              <p className="text-[10px] text-white/60 mt-1">ativos</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-white/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
+              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </div>
+          </div>
+        </div>
 
-        <Card className="border-l-4 border-l-[#BC9D32]">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Próx. Venc.</p>
-                <p className="text-2xl sm:text-3xl font-bold text-[#BC9D32] mt-0.5">{proximoVencimento}</p>
-              </div>
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#BC9D32]/10 flex items-center justify-center shrink-0">
-                <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-[#BC9D32]" />
-              </div>
+        {/* Próximo Vencimento */}
+        <div className="rounded-xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #D4A017 0%, #F59E0B 100%)' }}>
+          <div className="absolute top-0 right-0 w-20 h-20 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+          <div className="flex items-center justify-between gap-2 relative z-10">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-white/80 truncate">Próx. Venc.</p>
+              <p className="text-2xl sm:text-3xl font-bold mt-1">{proximoVencimento}</p>
+              <p className="text-[10px] text-white/60 mt-1">atenção</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-white/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
+              <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </div>
+          </div>
+        </div>
 
-        <Card className="border-l-4 border-l-red-600">
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Vencidos</p>
-                <p className="text-2xl sm:text-3xl font-bold text-red-700 mt-0.5">{vencidos}</p>
-              </div>
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-                <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
-              </div>
+        {/* Vencidos */}
+        <div className="rounded-xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #DC2626 0%, #EF4444 100%)' }}>
+          <div className="absolute top-0 right-0 w-20 h-20 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+          <div className="flex items-center justify-between gap-2 relative z-10">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-white/80 truncate">Vencidos</p>
+              <p className="text-2xl sm:text-3xl font-bold mt-1">{vencidos}</p>
+              <p className="text-[10px] text-white/60 mt-1">expirados</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-white/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
+              <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Extra KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-        <Card>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-lg bg-[#005A92]/10 flex items-center justify-center shrink-0">
-                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-[#005A92]" />
+              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #1A73C4 0%, #2196F3 100%)' }}>
+                <Clock className="h-5 w-5 text-white" />
               </div>
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-muted-foreground">Prazo Médio de Vigência</p>
@@ -167,11 +189,11 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-lg bg-[#A0A0A0]/10 flex items-center justify-center shrink-0">
-                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-[#A0A0A0]" />
+              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #94A3B8 0%, #64748B 100%)' }}>
+                <Calendar className="h-5 w-5 text-white" />
               </div>
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-muted-foreground">Sem Data Definida</p>
@@ -185,10 +207,12 @@ export default function Home() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
         {/* Distribuição por Diretoria */}
-        <Card>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
+                <BarChart3 className="h-3.5 w-3.5 text-white" />
+              </div>
               Por Diretoria
             </CardTitle>
           </CardHeader>
@@ -203,27 +227,30 @@ export default function Home() {
                 margin={{ left: 10, right: 20, top: 5, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis type="number" tick={{ fontSize: 11 }} />
-                <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 10 }} />
+                <XAxis type="number" tick={{ fontSize: 11, fill: '#64748B' }} />
+                <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 10, fill: '#64748B' }} />
                 <Tooltip
                   contentStyle={{
-                    borderRadius: "8px",
+                    borderRadius: "10px",
                     fontSize: "12px",
-                    border: "1px solid #e5e7eb",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                    border: "none",
+                    boxShadow: "0 10px 25px -5px rgb(0 0 0 / 0.1)",
+                    background: 'white',
                   }}
                 />
-                <Bar dataKey="total" fill="#005A92" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="total" fill={DETRAN_BLUE} radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
         {/* Status de Vigência */}
-        <Card>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <PieChartIcon className="h-4 w-4 text-muted-foreground" />
+              <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1B8A5A, #4CAF50)' }}>
+                <PieChartIcon className="h-3.5 w-3.5 text-white" />
+              </div>
               Status de Vigência
             </CardTitle>
           </CardHeader>
@@ -238,7 +265,7 @@ export default function Home() {
                   outerRadius={90}
                   paddingAngle={3}
                   dataKey="value"
-                  strokeWidth={2}
+                  strokeWidth={0}
                   label={({ name, value }) => `${name}: ${value}`}
                 >
                   {statusData.map((entry, index) => (
@@ -247,10 +274,10 @@ export default function Home() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    borderRadius: "8px",
+                    borderRadius: "10px",
                     fontSize: "12px",
-                    border: "1px solid #e5e7eb",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                    border: "none",
+                    boxShadow: "0 10px 25px -5px rgb(0 0 0 / 0.1)",
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: "12px" }} iconType="circle" iconSize={8} />
@@ -260,10 +287,12 @@ export default function Home() {
         </Card>
 
         {/* Distribuição por Tipo */}
-        <Card>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <PieChartIcon className="h-4 w-4 text-muted-foreground" />
+              <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #17A2B8, #20C997)' }}>
+                <PieChartIcon className="h-3.5 w-3.5 text-white" />
+              </div>
               Por Tipo de Instrumento
             </CardTitle>
           </CardHeader>
@@ -280,7 +309,7 @@ export default function Home() {
                   outerRadius={90}
                   paddingAngle={2}
                   dataKey="value"
-                  strokeWidth={2}
+                  strokeWidth={0}
                   label={({ value }) => `${value}`}
                 >
                   {(stats?.porTipo ?? []).map((_, index) => (
@@ -289,10 +318,10 @@ export default function Home() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    borderRadius: "8px",
+                    borderRadius: "10px",
                     fontSize: "12px",
-                    border: "1px solid #e5e7eb",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                    border: "none",
+                    boxShadow: "0 10px 25px -5px rgb(0 0 0 / 0.1)",
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: "11px" }} iconType="circle" iconSize={8} />
@@ -302,10 +331,12 @@ export default function Home() {
         </Card>
 
         {/* Distribuição por Ano */}
-        <Card>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D4A017, #F59E0B)' }}>
+                <BarChart3 className="h-3.5 w-3.5 text-white" />
+              </div>
               Por Ano de Início
             </CardTitle>
           </CardHeader>
@@ -316,17 +347,17 @@ export default function Home() {
                 margin={{ left: 0, right: 20, top: 5, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="ano" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} />
+                <XAxis dataKey="ano" tick={{ fontSize: 11, fill: '#64748B' }} />
+                <YAxis tick={{ fontSize: 11, fill: '#64748B' }} />
                 <Tooltip
                   contentStyle={{
-                    borderRadius: "8px",
+                    borderRadius: "10px",
                     fontSize: "12px",
-                    border: "1px solid #e5e7eb",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                    border: "none",
+                    boxShadow: "0 10px 25px -5px rgb(0 0 0 / 0.1)",
                   }}
                 />
-                <Bar dataKey="count" name="Instrumentos" fill="#427842" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" name="Instrumentos" fill={DETRAN_GREEN} radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -335,21 +366,23 @@ export default function Home() {
 
       {/* Alertas de Vencimento */}
       {!alertasLoading && alertas && alertas.length > 0 && (
-        <Card className="border-[#BC9D32]/30 bg-[#BC9D32]/5">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-[#8B6914]">
-              <AlertTriangle className="h-4 w-4" />
+        <Card className="border-0 shadow-md overflow-hidden">
+          <CardHeader className="pb-3" style={{ background: 'linear-gradient(135deg, rgba(212,160,23,0.08) 0%, rgba(245,158,11,0.08) 100%)', borderBottom: '1px solid rgba(212,160,23,0.15)' }}>
+            <CardTitle className="text-sm font-semibold flex items-center gap-2" style={{ color: '#B8860B' }}>
+              <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D4A017, #F59E0B)' }}>
+                <AlertTriangle className="h-3.5 w-3.5 text-white" />
+              </div>
               Instrumentos Próximos do Vencimento ({alertas.length})
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             <div className="space-y-2.5">
               {alertas.slice(0, 5).map((item) => {
                 const status = getStatusInstrumento(item.dataTermino);
                 return (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-3 bg-white rounded-lg border cursor-pointer hover:shadow-sm transition-all active:scale-[0.99]"
+                    className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all active:scale-[0.99] group"
                     onClick={() => setLocation(`/instrumentos/${item.id}`)}
                   >
                     <div className="flex-1 min-w-0">
@@ -364,19 +397,24 @@ export default function Home() {
                         {item.partesEnvolvidas}
                       </p>
                     </div>
-                    <div className="text-right ml-4 shrink-0">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Vencimento</p>
-                      <p className="text-sm font-semibold text-[#BC9D32] tabular-nums">{formatDate(item.dataTermino)}</p>
+                    <div className="flex items-center gap-3 ml-4 shrink-0">
+                      <div className="text-right">
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Vencimento</p>
+                        <p className="text-sm font-semibold tabular-nums" style={{ color: '#B8860B' }}>{formatDate(item.dataTermino)}</p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
                     </div>
                   </div>
                 );
               })}
               {alertas.length > 5 && (
                 <button
-                  onClick={() => setLocation("/alertas")}
-                  className="text-sm text-primary hover:underline font-medium mt-1"
+                  onClick={() => setLocation("/instrumentos")}
+                  className="text-sm font-medium mt-2 flex items-center gap-1 transition-colors"
+                  style={{ color: DETRAN_BLUE }}
                 >
-                  Ver todos os {alertas.length} alertas →
+                  Ver todos os {alertas.length} alertas
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               )}
             </div>

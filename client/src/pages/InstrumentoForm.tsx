@@ -121,17 +121,20 @@ export default function InstrumentoForm() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={() => setLocation(isEditing ? `/instrumentos/${id}` : "/instrumentos")}>
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">
-            {isEditing ? "Editar Instrumento" : "Novo Instrumento"}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            {isEditing ? "Atualize as informações do instrumento" : "Cadastre um novo instrumento jurídico"}
-          </p>
+      <div className="rounded-xl p-5 sm:p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B4F72 0%, #1A73C4 50%, #1B8A5A 100%)' }}>
+        <div className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+        <div className="flex items-center gap-3 relative z-10">
+          <Button variant="ghost" size="icon" className="text-white hover:bg-white/15" onClick={() => setLocation(isEditing ? `/instrumentos/${id}` : "/instrumentos")}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold">
+              {isEditing ? "Editar Instrumento" : "Novo Instrumento"}
+            </h1>
+            <p className="text-sm text-white/70 mt-1">
+              {isEditing ? "Atualize as informações do instrumento" : "Cadastre um novo instrumento jurídico"}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -227,7 +230,7 @@ export default function InstrumentoForm() {
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={saving} className="gap-2">
+              <Button type="submit" disabled={saving} className="gap-2 text-white font-semibold" style={{ background: 'linear-gradient(135deg, #1B8A5A, #2E9D6A)' }}>
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {isEditing ? "Salvar Alterações" : "Criar Instrumento"}
               </Button>

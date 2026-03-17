@@ -69,9 +69,18 @@
 - [x] Limpar dados mockup de VPN do banco
 - [x] CRUD completo de VPN (adicionar, editar, excluir)
 - [x] Sistema de upload de anexos para VPN
-- [ ] Auditoria completa: verificar datas de assinatura faltantes
-- [ ] Auditoria completa: padronizar números/nomes dos contratos
-- [ ] Auditoria completa: criar identificação única para cada contrato
-- [ ] Auditoria completa: cruzar dados do banco vs PDFs originais
-- [ ] Auditoria completa: corrigir dados inconsistentes no banco
-- [ ] Relatório de auditoria detalhado
+- [x] Auditoria completa: verificar datas de assinatura faltantes (42 correções)
+- [x] Auditoria completa: padronizar números/nomes dos contratos (formato NNN/AAAA)
+- [x] Auditoria completa: criar identificação única para cada contrato (ID auto-increment)
+- [x] Auditoria completa: cruzar dados do banco vs PDFs originais (57 instrumentos)
+- [x] Auditoria completa: corrigir dados inconsistentes no banco (9 termos aditivos adicionados)
+- [x] Relatório de auditoria detalhado
+- [x] Upload da logo DETRAN-RJ (D azul/verde) para CDN
+- [x] Upload da logo DETRAN.RJ (texto completo) para CDN
+- [x] Refatorar tema CSS com cores oficiais: azul #1A73C4, verde #2E8B57
+- [x] Degradê azul-verde no header/banner do Dashboard
+- [x] Sidebar com identidade visual (logo, cores)
+- [x] Cards do Dashboard com cores vibrantes e degradês
+- [x] Hierarquia visual com tipografia em azul e verde
+- [x] Paleta colorida mantendo identidade oficial em todas as páginas
+- [x] Remover fundo branco da logo quando necessário

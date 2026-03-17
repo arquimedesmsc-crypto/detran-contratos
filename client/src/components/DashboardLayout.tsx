@@ -33,6 +33,9 @@ import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "./DashboardLayoutSkeleton";
 import { Button } from "./ui/button";
 
+const LOGO_D_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663443081896/MDXpDWKkLJQQcpGvzWTLe8/detran-logo-d_72599473.jpg";
+const LOGO_FULL_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663443081896/MDXpDWKkLJQQcpGvzWTLe8/detran-logo-full_ee24eb7a.jpg";
+
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: FileText, label: "Instrumentos", path: "/instrumentos" },
@@ -65,28 +68,46 @@ export default function DashboardLayout({
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-xl bg-primary flex items-center justify-center">
-              <FileText className="w-8 h-8 text-primary-foreground" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-center text-foreground">
-              DETRAN-RJ
+      <div className="flex items-center justify-center min-h-screen" style={{ background: 'linear-gradient(135deg, #1B4F72 0%, #1A73C4 40%, #1B8A5A 100%)' }}>
+        <div className="flex flex-col items-center gap-8 p-10 max-w-md w-full bg-white rounded-2xl shadow-2xl mx-4">
+          <div className="flex flex-col items-center gap-5">
+            <img
+              src={LOGO_FULL_URL}
+              alt="DETRAN.RJ"
+              className="h-12 object-contain"
+              style={{ mixBlendMode: 'multiply' }}
+            />
+            <h1 className="text-2xl font-bold tracking-tight text-center" style={{ color: '#1A73C4' }}>
+              Sistema de Contratos DTIC
             </h1>
-            <p className="text-sm text-muted-foreground text-center max-w-sm">
-              Sistema de Gestão de Instrumentos Jurídicos. Faça login para acessar o painel.
+            <p className="text-sm text-gray-500 text-center max-w-sm leading-relaxed">
+              Departamento de Tecnologia da Informação e Comunicação
             </p>
+            <div className="w-full border-t border-gray-100 my-1" />
+            <div className="text-center">
+              <p className="text-sm font-medium" style={{ color: '#1B8A5A' }}>
+                Gerenciamento de Instrumentos Jurídicos
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                Acesso restrito aos servidores do DETRAN-RJ
+              </p>
+            </div>
           </div>
           <Button
             onClick={() => {
               window.location.href = getLoginUrl();
             }}
             size="lg"
-            className="w-full shadow-lg hover:shadow-xl transition-all"
+            className="w-full shadow-lg hover:shadow-xl transition-all text-white font-semibold text-base py-6"
+            style={{ background: 'linear-gradient(135deg, #1B8A5A 0%, #2E9D6A 100%)' }}
           >
-            Entrar
+            Entrar no Sistema
           </Button>
+          <div className="text-center">
+            <p className="text-xs text-gray-400">
+              DETRAN-RJ — Departamento de Trânsito do Estado do Rio de Janeiro
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -168,27 +189,42 @@ function DashboardLayoutContent({
           className="border-r-0"
           disableTransition={isResizing}
         >
-          <SidebarHeader className="h-16 justify-center">
+          {/* Header com logo */}
+          <SidebarHeader className="h-16 justify-center" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
-                className="h-8 w-8 flex items-center justify-center hover:bg-sidebar-accent rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
+                className="h-9 w-9 flex items-center justify-center rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0 overflow-hidden"
                 aria-label="Toggle navigation"
+                style={{ background: 'rgba(255,255,255,0.08)' }}
               >
-                <PanelLeft className="h-4 w-4 text-sidebar-foreground/70" />
+                {isCollapsed ? (
+                  <PanelLeft className="h-4 w-4 text-sidebar-foreground/70" />
+                ) : (
+                  <img
+                    src={LOGO_D_URL}
+                    alt="DETRAN"
+                    className="h-7 w-7 object-contain rounded"
+                    style={{ mixBlendMode: 'screen' }}
+                  />
+                )}
               </button>
               {!isCollapsed ? (
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-bold tracking-tight truncate text-sidebar-foreground text-sm">
+                <div className="flex flex-col min-w-0">
+                  <span className="font-bold tracking-tight truncate text-white text-sm">
                     DETRAN-RJ
+                  </span>
+                  <span className="text-[10px] text-sidebar-foreground/50 truncate">
+                    Gestão de Contratos
                   </span>
                 </div>
               ) : null}
             </div>
           </SidebarHeader>
 
-          <SidebarContent className="gap-0">
-            <SidebarMenu className="px-2 py-1">
+          {/* Menu items */}
+          <SidebarContent className="gap-0 mt-2">
+            <SidebarMenu className="px-2 py-1 space-y-1">
               {menuItems.map((item) => {
                 const isActive =
                   item.path === location ||
@@ -199,12 +235,20 @@ function DashboardLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className="h-10 transition-all font-normal"
+                      className={`h-11 transition-all font-normal rounded-lg ${
+                        isActive
+                          ? "font-semibold"
+                          : ""
+                      }`}
+                      style={isActive ? {
+                        background: 'linear-gradient(135deg, rgba(26,115,196,0.3) 0%, rgba(27,138,90,0.3) 100%)',
+                        borderLeft: '3px solid #1B8A5A',
+                      } : {}}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-sidebar-primary-foreground" : "text-sidebar-foreground/70"}`}
+                        className={`h-[18px] w-[18px] ${isActive ? "text-white" : "text-sidebar-foreground/60"}`}
                       />
-                      <span>{item.label}</span>
+                      <span className={isActive ? "text-white" : ""}>{item.label}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -212,20 +256,21 @@ function DashboardLayoutContent({
             </SidebarMenu>
           </SidebarContent>
 
-          <SidebarFooter className="p-3">
+          {/* Footer com perfil */}
+          <SidebarFooter className="p-3" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 rounded-lg px-1 py-1 hover:bg-sidebar-accent/50 transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <Avatar className="h-9 w-9 border border-sidebar-border shrink-0">
-                    <AvatarFallback className="text-xs font-medium bg-sidebar-accent text-sidebar-foreground">
+                <button className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                  <Avatar className="h-9 w-9 shrink-0" style={{ border: '2px solid rgba(27,138,90,0.5)' }}>
+                    <AvatarFallback className="text-xs font-bold text-white" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
-                    <p className="text-sm font-medium truncate leading-none text-sidebar-foreground">
+                    <p className="text-sm font-medium truncate leading-none text-white">
                       {user?.name || "-"}
                     </p>
-                    <p className="text-xs text-sidebar-foreground/60 truncate mt-1.5">
+                    <p className="text-[11px] text-sidebar-foreground/50 truncate mt-1.5">
                       {user?.email || "-"}
                     </p>
                   </div>
@@ -255,18 +300,17 @@ function DashboardLayoutContent({
 
       <SidebarInset>
         {isMobile && (
-          <div className="flex border-b h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
+          <div className="flex h-14 items-center justify-between px-3 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40" style={{ background: 'linear-gradient(90deg, #1B4F72, #1A73C4)', borderBottom: '3px solid #1B8A5A' }}>
             <div className="flex items-center gap-2">
-              <SidebarTrigger className="h-9 w-9 rounded-lg bg-background" />
-              <div className="flex items-center gap-3">
-                <span className="tracking-tight text-foreground font-semibold">
-                  {activeMenuItem?.label ?? "Menu"}
-                </span>
-              </div>
+              <SidebarTrigger className="h-9 w-9 rounded-lg text-white" />
+              <img src={LOGO_D_URL} alt="DETRAN" className="h-7 w-7 object-contain rounded" style={{ mixBlendMode: 'screen' }} />
+              <span className="tracking-tight text-white font-semibold text-sm">
+                {activeMenuItem?.label ?? "Menu"}
+              </span>
             </div>
           </div>
         )}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-4 md:p-6">{children}</main>
       </SidebarInset>
     </>
   );

@@ -45,102 +45,109 @@
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  /* Custom DETRAN colors */
+  --color-detran-blue: oklch(0.52 0.16 250);
+  --color-detran-green: oklch(0.55 0.16 155);
+  --color-detran-blue-dark: oklch(0.35 0.10 250);
+  --color-detran-green-dark: oklch(0.42 0.12 155);
+  --color-detran-blue-light: oklch(0.92 0.04 250);
+  --color-detran-green-light: oklch(0.92 0.04 155);
+  --color-detran-teal: oklch(0.54 0.12 200);
 }
 
 /*
-  Identidade Visual - Governo do Estado do Rio de Janeiro
-  Manual de Marca - Outubro 2023
+  Identidade Visual - DETRAN-RJ
+  Departamento de Trânsito do Estado do Rio de Janeiro
   Cores oficiais:
-    Azul:    #005A92 (Pantone 3015 C)
-    Dourado: #BC9D32 (Pantone 117 C)
-    Verde:   #427842 (Pantone 3415 C)
-    Cinza:   #A0A0A0 (Pantone Cool Gray 7 C)
-    Preto:   #000000 (Pantone Black C)
-  Fonte de apoio: Roboto (Bold, Regular, Black)
+    Azul DETRAN:  #1A73C4 → oklch(0.52 0.16 250)
+    Verde DETRAN: #2E8B57 → oklch(0.55 0.16 155)
+    Azul escuro:  #1B4F72 → oklch(0.35 0.10 250)
+    Verde escuro: #1E6B3A → oklch(0.42 0.12 155)
+  Fonte: Roboto (Bold, Regular, Black)
 */
 
 :root {
-  --radius: 0.5rem;
-  /* Primary: Azul oficial #005A92 → oklch(0.42 0.10 240) */
-  --primary: oklch(0.42 0.10 240);
-  --primary-foreground: oklch(0.98 0 0);
-  /* Sidebar - Azul escuro profundo (derivado do gradiente do manual) */
-  --sidebar-primary: oklch(0.35 0.09 240);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar: oklch(0.20 0.06 245);
-  --sidebar-foreground: oklch(0.90 0.01 240);
-  --sidebar-accent: oklch(0.26 0.07 245);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.28 0.06 245);
-  --sidebar-ring: oklch(0.50 0.12 240);
-  /* Main area - fundo claro neutro */
-  --background: oklch(0.975 0.003 240);
-  --foreground: oklch(0.16 0.02 245);
+  --radius: 0.625rem;
+  /* Primary: Azul DETRAN #1A73C4 */
+  --primary: oklch(0.52 0.16 250);
+  --primary-foreground: oklch(0.99 0 0);
+  /* Sidebar - Azul escuro DETRAN com tom profundo */
+  --sidebar-primary: oklch(0.52 0.16 250);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar: oklch(0.22 0.05 250);
+  --sidebar-foreground: oklch(0.92 0.01 250);
+  --sidebar-accent: oklch(0.30 0.08 250);
+  --sidebar-accent-foreground: oklch(0.99 0 0);
+  --sidebar-border: oklch(0.28 0.06 250);
+  --sidebar-ring: oklch(0.52 0.16 250);
+  /* Main area - fundo claro com leve toque azulado */
+  --background: oklch(0.975 0.005 250);
+  --foreground: oklch(0.18 0.02 250);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.16 0.02 245);
+  --card-foreground: oklch(0.18 0.02 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.16 0.02 245);
-  --secondary: oklch(0.955 0.008 240);
-  --secondary-foreground: oklch(0.35 0.05 240);
-  --muted: oklch(0.96 0.005 240);
-  --muted-foreground: oklch(0.48 0.02 240);
-  --accent: oklch(0.955 0.008 240);
-  --accent-foreground: oklch(0.16 0.02 245);
+  --popover-foreground: oklch(0.18 0.02 250);
+  --secondary: oklch(0.95 0.01 250);
+  --secondary-foreground: oklch(0.35 0.08 250);
+  --muted: oklch(0.96 0.005 250);
+  --muted-foreground: oklch(0.50 0.02 250);
+  --accent: oklch(0.95 0.015 250);
+  --accent-foreground: oklch(0.18 0.02 250);
   --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.92 0.005 240);
-  --input: oklch(0.92 0.005 240);
-  --ring: oklch(0.42 0.10 240);
-  /* Charts - paleta baseada nas cores oficiais */
-  --chart-1: oklch(0.42 0.10 240);   /* Azul oficial */
-  --chart-2: oklch(0.65 0.14 90);    /* Dourado oficial */
-  --chart-3: oklch(0.50 0.12 150);   /* Verde oficial */
-  --chart-4: oklch(0.55 0.18 310);   /* Roxo complementar */
-  --chart-5: oklch(0.58 0.08 240);   /* Cinza azulado */
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.91 0.008 250);
+  --input: oklch(0.91 0.008 250);
+  --ring: oklch(0.52 0.16 250);
+  /* Charts - paleta vibrante DETRAN */
+  --chart-1: oklch(0.52 0.16 250);   /* Azul DETRAN */
+  --chart-2: oklch(0.55 0.16 155);   /* Verde DETRAN */
+  --chart-3: oklch(0.54 0.12 200);   /* Teal/Ciano */
+  --chart-4: oklch(0.65 0.18 80);    /* Amarelo dourado */
+  --chart-5: oklch(0.58 0.14 300);   /* Roxo complementar */
   /* Status colors */
-  --success: oklch(0.50 0.14 150);   /* Verde oficial #427842 */
-  --success-foreground: oklch(0.98 0 0);
-  --warning: oklch(0.65 0.14 90);    /* Dourado oficial #BC9D32 */
-  --warning-foreground: oklch(0.20 0.05 90);
+  --success: oklch(0.55 0.16 155);   /* Verde DETRAN */
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.72 0.16 75);    /* Amarelo vibrante */
+  --warning-foreground: oklch(0.25 0.06 75);
 }
 
 .dark {
-  --primary: oklch(0.55 0.12 240);
-  --primary-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.50 0.11 240);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --background: oklch(0.14 0.02 245);
-  --foreground: oklch(0.90 0.01 240);
-  --card: oklch(0.19 0.03 245);
-  --card-foreground: oklch(0.90 0.01 240);
-  --popover: oklch(0.19 0.03 245);
-  --popover-foreground: oklch(0.90 0.01 240);
-  --secondary: oklch(0.23 0.03 245);
-  --secondary-foreground: oklch(0.78 0.02 240);
-  --muted: oklch(0.26 0.03 245);
-  --muted-foreground: oklch(0.65 0.02 240);
-  --accent: oklch(0.26 0.03 245);
-  --accent-foreground: oklch(0.92 0.01 240);
+  --primary: oklch(0.58 0.16 250);
+  --primary-foreground: oklch(0.99 0 0);
+  --sidebar-primary: oklch(0.55 0.14 250);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --background: oklch(0.14 0.02 250);
+  --foreground: oklch(0.92 0.01 250);
+  --card: oklch(0.19 0.03 250);
+  --card-foreground: oklch(0.92 0.01 250);
+  --popover: oklch(0.19 0.03 250);
+  --popover-foreground: oklch(0.92 0.01 250);
+  --secondary: oklch(0.23 0.03 250);
+  --secondary-foreground: oklch(0.80 0.02 250);
+  --muted: oklch(0.26 0.03 250);
+  --muted-foreground: oklch(0.65 0.02 250);
+  --accent: oklch(0.26 0.03 250);
+  --accent-foreground: oklch(0.92 0.01 250);
   --destructive: oklch(0.60 0.20 25);
-  --destructive-foreground: oklch(0.98 0 0);
+  --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.55 0.12 240);
-  --chart-1: oklch(0.55 0.12 240);
-  --chart-2: oklch(0.70 0.14 90);
-  --chart-3: oklch(0.55 0.12 150);
-  --chart-4: oklch(0.60 0.18 310);
-  --chart-5: oklch(0.60 0.08 240);
-  --sidebar: oklch(0.16 0.03 245);
-  --sidebar-foreground: oklch(0.90 0.01 240);
-  --sidebar-accent: oklch(0.23 0.04 245);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --ring: oklch(0.58 0.16 250);
+  --chart-1: oklch(0.58 0.16 250);
+  --chart-2: oklch(0.60 0.16 155);
+  --chart-3: oklch(0.58 0.12 200);
+  --chart-4: oklch(0.70 0.18 80);
+  --chart-5: oklch(0.62 0.14 300);
+  --sidebar: oklch(0.16 0.03 250);
+  --sidebar-foreground: oklch(0.92 0.01 250);
+  --sidebar-accent: oklch(0.23 0.04 250);
+  --sidebar-accent-foreground: oklch(0.99 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.55 0.12 240);
-  --success: oklch(0.55 0.14 150);
-  --success-foreground: oklch(0.98 0 0);
-  --warning: oklch(0.70 0.14 90);
-  --warning-foreground: oklch(0.20 0.05 90);
+  --sidebar-ring: oklch(0.58 0.16 250);
+  --success: oklch(0.58 0.16 155);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.72 0.16 75);
+  --warning-foreground: oklch(0.25 0.06 75);
 }
 
 @layer base {
@@ -190,5 +197,57 @@
       padding-right: 2rem;
       max-width: 1400px;
     }
+  }
+}
+
+/* DETRAN-RJ Custom Utilities */
+@layer utilities {
+  .gradient-detran {
+    background: linear-gradient(135deg, #1A73C4 0%, #1B8A5A 100%);
+  }
+  .gradient-detran-horizontal {
+    background: linear-gradient(90deg, #1A73C4 0%, #1B8A5A 100%);
+  }
+  .gradient-detran-vertical {
+    background: linear-gradient(180deg, #1B4F72 0%, #1A73C4 50%, #1B8A5A 100%);
+  }
+  .gradient-detran-subtle {
+    background: linear-gradient(135deg, #E8F4FD 0%, #E8F5E9 100%);
+  }
+  .gradient-detran-card-blue {
+    background: linear-gradient(135deg, #1A73C4 0%, #2196F3 100%);
+  }
+  .gradient-detran-card-green {
+    background: linear-gradient(135deg, #1B8A5A 0%, #4CAF50 100%);
+  }
+  .gradient-detran-card-teal {
+    background: linear-gradient(135deg, #1A73C4 0%, #1B8A5A 100%);
+  }
+  .gradient-detran-card-warning {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+  }
+  .gradient-detran-card-danger {
+    background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+  }
+  .text-detran-blue {
+    color: #1A73C4;
+  }
+  .text-detran-green {
+    color: #1B8A5A;
+  }
+  .text-detran-blue-dark {
+    color: #1B4F72;
+  }
+  .bg-detran-blue-light {
+    background-color: #E8F4FD;
+  }
+  .bg-detran-green-light {
+    background-color: #E8F5E9;
+  }
+  .border-detran-blue {
+    border-color: #1A73C4;
+  }
+  .border-detran-green {
+    border-color: #1B8A5A;
   }
 }

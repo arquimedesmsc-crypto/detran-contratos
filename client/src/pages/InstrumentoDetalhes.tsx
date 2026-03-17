@@ -147,85 +147,85 @@ export default function InstrumentoDetalhes() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 shrink-0 mt-0.5 rounded-lg"
-            onClick={() => setLocation("/instrumentos")}
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                {instrumento.tipo} n.º {instrumento.numero}
-              </h1>
-              <Badge
-                variant="outline"
-                className={`text-xs font-medium ${status.bgColor} ${status.color} border-0 px-2.5 py-0.5`}
-              >
-                <StatusIcon
-                  className={`h-3 w-3 mr-1.5 ${statusColorMap[status.label] ?? ""}`}
-                />
-                {status.label}
-              </Badge>
-            </div>
-            <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
-              <Building2 className="h-3.5 w-3.5" />
-              {instrumento.diretoria}
-            </p>
-          </div>
-        </div>
-
-        {user && (
-          <div className="flex items-center gap-2 ml-12 sm:ml-0 shrink-0">
+      {/* Header com degradê DETRAN */}
+      <div className="rounded-xl p-5 sm:p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B4F72 0%, #1A73C4 50%, #1B8A5A 100%)' }}>
+        <div className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, white 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 relative z-10">
+          <div className="flex items-start gap-3">
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setLocation(`/instrumentos/${id}/editar`)}
-              className="gap-1.5 h-9 rounded-lg"
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 shrink-0 mt-0.5 rounded-lg text-white hover:bg-white/15"
+              onClick={() => setLocation("/instrumentos")}
             >
-              <Edit className="h-3.5 w-3.5" /> Editar
+              <ArrowLeft className="h-4 w-4" />
             </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1.5 h-9 rounded-lg text-destructive hover:text-destructive border-destructive/30 hover:bg-destructive/5"
+            <div className="min-w-0">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+                  {instrumento.tipo} n.º {instrumento.numero}
+                </h1>
+                <Badge
+                  className="text-xs font-medium border-0 px-2.5 py-0.5 bg-white/20 text-white"
                 >
-                  <Trash2 className="h-3.5 w-3.5" /> Excluir
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Excluir instrumento?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Esta ação não pode ser desfeita. O instrumento e todos os
-                    seus termos aditivos serão removidos permanentemente.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => deleteMutation.mutate({ id })}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Excluir
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                  <StatusIcon className="h-3 w-3 mr-1.5" />
+                  {status.label}
+                </Badge>
+              </div>
+              <p className="text-sm text-white/70 mt-1 flex items-center gap-1.5">
+                <Building2 className="h-3.5 w-3.5" />
+                {instrumento.diretoria}
+              </p>
+            </div>
           </div>
-        )}
+
+          {user && (
+            <div className="flex items-center gap-2 ml-12 sm:ml-0 shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setLocation(`/instrumentos/${id}/editar`)}
+                className="gap-1.5 h-9 rounded-lg bg-white/15 border-white/30 text-white hover:bg-white/25 hover:text-white"
+              >
+                <Edit className="h-3.5 w-3.5" /> Editar
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 h-9 rounded-lg bg-red-500/20 border-red-400/30 text-white hover:bg-red-500/30 hover:text-white"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" /> Excluir
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Excluir instrumento?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta ação não pode ser desfeita. O instrumento e todos os
+                      seus termos aditivos serão removidos permanentemente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => deleteMutation.mutate({ id })}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Excluir
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Barra de Vigência */}
       {instrumento.dataInicio && instrumento.dataTermino && (
-        <Card className="border-0 shadow-sm bg-gradient-to-r from-[#005A92]/5 to-[#005A92]/10">
+        <Card className="border-0 shadow-md" style={{ background: 'linear-gradient(135deg, rgba(26,115,196,0.06) 0%, rgba(27,138,90,0.06) 100%)', borderLeft: '4px solid #1A73C4' }}>
           <CardContent className="p-4 sm:p-5">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex-1">
@@ -287,8 +287,8 @@ export default function InstrumentoDetalhes() {
           <Card className="shadow-sm">
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-                <div className="h-7 w-7 rounded-lg bg-[#005A92]/10 flex items-center justify-center">
-                  <FileText className="h-3.5 w-3.5 text-[#005A92]" />
+                <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
+                  <FileText className="h-3.5 w-3.5 text-white" />
                 </div>
                 Informações Gerais
               </CardTitle>
@@ -381,8 +381,8 @@ export default function InstrumentoDetalhes() {
           <Card className="shadow-sm">
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-                <div className="h-7 w-7 rounded-lg bg-[#005A92]/10 flex items-center justify-center">
-                  <Clock className="h-3.5 w-3.5 text-[#005A92]" />
+                <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
+                  <Clock className="h-3.5 w-3.5 text-white" />
                 </div>
                 Vigência
               </CardTitle>
@@ -441,8 +441,8 @@ export default function InstrumentoDetalhes() {
           <Card className="shadow-sm">
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-                <div className="h-7 w-7 rounded-lg bg-[#005A92]/10 flex items-center justify-center">
-                  <ScrollText className="h-3.5 w-3.5 text-[#005A92]" />
+                <div className="h-7 w-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1A73C4, #1B8A5A)' }}>
+                  <ScrollText className="h-3.5 w-3.5 text-white" />
                 </div>
                 Termos Aditivos
                 {termos && termos.length > 0 && (
@@ -479,7 +479,7 @@ export default function InstrumentoDetalhes() {
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1.5 mb-1.5">
-                            <span className="h-4 w-4 rounded-full bg-[#005A92] text-white text-[9px] font-bold flex items-center justify-center shrink-0">
+                            <span className="h-4 w-4 rounded-full text-white text-[9px] font-bold flex items-center justify-center shrink-0" style={{ background: '#1A73C4' }}>
                               {idx + 1}
                             </span>
                             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
