@@ -1,0 +1,9 @@
+{
+  "query": "CREATE INDEX idx_instrumentos_diretoria ON instrumentos(diretoria); CREATE INDEX idx_instrumentos_tipo ON instrumentos(tipo); CREATE INDEX idx_termos_instrumentoId ON termos_aditivos(instrumentoId); CREATE INDEX idx_anexos_entidade ON anexos(entidadeTipo, entidadeId); CREATE INDEX idx_vpn_status ON vpn_conexoes(status);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute CREATE INDEX idx_instrumentos_diretoria ON instrumentos(diretoria); CREATE INDEX idx_instrumentos_tipo ON instrumentos(tipo); CREATE INDEX idx_termos_instrumentoId ON termos_aditivos(instrumentoId); CREATE INDEX idx_anexos_entidade ON anexos(entidadeTipo, entidadeId); CREATE INDEX idx_vpn_status ON vpn_conexoes(status);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 3296
+}

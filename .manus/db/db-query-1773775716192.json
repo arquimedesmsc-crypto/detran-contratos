@@ -1,0 +1,30 @@
+{
+  "query": "SELECT 'instrumentos' as tabela, COUNT(*) as total FROM instrumentos UNION ALL SELECT 'termos_aditivos', COUNT(*) FROM termos_aditivos UNION ALL SELECT 'vpn_conexoes', COUNT(*) FROM vpn_conexoes UNION ALL SELECT 'anexos', COUNT(*) FROM anexos UNION ALL SELECT 'users', COUNT(*) FROM users;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute SELECT 'instrumentos' as tabela, COUNT(*) as total FROM instrumentos UNION ALL SELECT 'termos_aditivos', COUNT(*) FROM termos_aditivos UNION ALL SELECT 'vpn_conexoes', COUNT(*) FROM vpn_conexoes UNION ALL SELECT 'anexos', COUNT(*) FROM anexos UNION ALL SELECT 'users', COUNT(*) FROM users;",
+  "rows": [
+    {
+      "tabela": "instrumentos",
+      "total": "57"
+    },
+    {
+      "tabela": "users",
+      "total": "2"
+    },
+    {
+      "tabela": "anexos",
+      "total": "1"
+    },
+    {
+      "tabela": "termos_aditivos",
+      "total": "16"
+    },
+    {
+      "tabela": "vpn_conexoes",
+      "total": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "tabela\ttotal\ninstrumentos\t57\nusers\t2\nanexos\t1\ntermos_aditivos\t16\nvpn_conexoes\t1\n",
+  "stderr": "",
+  "execution_time_ms": 63
+}

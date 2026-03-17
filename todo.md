@@ -96,3 +96,14 @@
 - [x] Gerar favicon.ico a partir da logo gerada
 - [x] Gerar ícones PWA 192x192 e 512x512 a partir da logo gerada
 - [x] Implementar splash screen animada com logo, efeito de carregamento e transições
+- [x] Auditoria: mapear todos os arquivos do projeto e identificar fantasmas/duplicados
+- [x] Limpar raiz do projeto (mover arquivos não essenciais para subpastas)
+- [x] Analisar base de dados: schema vs código, consistência e otimizações
+- [x] Verificar e melhorar qualidade dos testes (vitest)
+- [x] Criar README.md detalhado e visual (emojis, identidade visual, melhores práticas)
+- [x] Documentar guia de identidade visual (cores, tipografia, paleta oficial)
+- [x] Documentar features passo a passo
+- [x] Documentar importância do versionamento no GitHub
+- [x] Atualizar todo.md e criar CHANGELOG.md
+- [x] Garantir harmonia entre código e documentação
+- [x] Sincronizar repositório GitHub
