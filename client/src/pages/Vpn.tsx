@@ -18,8 +18,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Shield, Wifi, WifiOff, Ban, Search, Server, Activity, Filter, X, Globe } from "lucide-react";
+import { Shield, Wifi, WifiOff, Ban, Search, Server, Activity, Filter, X, Globe, Eye } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { formatBytes } from "@/lib/utils-instrumentos";
 import {
   PieChart,
@@ -42,6 +43,7 @@ export default function Vpn() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [, setLocation] = useLocation();
   const { data: conexoes, isLoading } = trpc.vpn.list.useQuery({
     search: search || undefined,
     status: statusFilter !== "all" ? statusFilter : undefined,
@@ -295,6 +297,7 @@ export default function Vpn() {
                   <TableHead className="whitespace-nowrap">Status</TableHead>
                   <TableHead className="whitespace-nowrap">Última Conexão</TableHead>
                   <TableHead className="whitespace-nowrap">Tráfego</TableHead>
+                  <TableHead className="whitespace-nowrap w-10"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -339,6 +342,11 @@ export default function Vpn() {
                             ? `↑${formatBytes(c.bytesEnviados ?? 0)} ↓${formatBytes(c.bytesRecebidos ?? 0)}`
                             : "-"}
                         </TableCell>
+                        <TableCell>
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setLocation(`/vpn/${c.id}`)}>
+                            <Eye className="h-3.5 w-3.5 text-muted-foreground" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     );
                   })
@@ -374,7 +382,7 @@ export default function Vpn() {
             return (
               <Card key={c.id}>
                 <CardContent className="p-4">
-                  <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex items-start justify-between gap-3 mb-3" onClick={() => setLocation(`/vpn/${c.id}`)} style={{cursor:'pointer'}}>
                     <div className="min-w-0">
                       <p className="font-semibold text-sm">{c.nomeUsuario}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">

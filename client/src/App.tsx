@@ -9,8 +9,8 @@ import Home from "./pages/Home";
 import Instrumentos from "./pages/Instrumentos";
 import InstrumentoDetalhes from "./pages/InstrumentoDetalhes";
 import InstrumentoForm from "./pages/InstrumentoForm";
-import Alertas from "./pages/Alertas";
 import Vpn from "./pages/Vpn";
+import VpnDetalhes from "./pages/VpnDetalhes";
 
 function Router() {
   return (
@@ -21,8 +21,8 @@ function Router() {
         <Route path="/instrumentos/novo" component={InstrumentoForm} />
         <Route path="/instrumentos/:id/editar" component={InstrumentoForm} />
         <Route path="/instrumentos/:id" component={InstrumentoDetalhes} />
-        <Route path="/alertas" component={Alertas} />
         <Route path="/vpn" component={Vpn} />
+        <Route path="/vpn/:id" component={VpnDetalhes} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

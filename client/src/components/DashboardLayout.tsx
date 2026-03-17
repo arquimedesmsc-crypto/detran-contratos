@@ -27,7 +27,6 @@ import {
   PanelLeft,
   FileText,
   Shield,
-  AlertTriangle,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -37,7 +36,6 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: FileText, label: "Instrumentos", path: "/instrumentos" },
-  { icon: AlertTriangle, label: "Alertas", path: "/alertas" },
   { icon: Shield, label: "VPN", path: "/vpn" },
 ];
 

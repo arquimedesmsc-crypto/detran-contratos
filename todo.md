@@ -38,3 +38,13 @@
 - [x] Funções de exportação PDF e Excel no frontend
 - [x] Botões de exportação na página de Instrumentos
 - [x] Testar exportação PDF e Excel
+- [x] Remover Alertas do menu lateral (mover para Dashboard)
+- [x] Menu com apenas Dashboard, Instrumentos e VPN
+- [x] Corrigir instrumentos sem data (22 instrumentos atualizados)
+- [x] Classificar diretorias externas (ERGE-RJ, SEPOL, MPRJ etc.) como "Externo"
+- [x] Página de detalhes de Instrumento com visual aprimorado
+- [x] Página de detalhes de VPN com visual aprimorado
+- [x] Botão de detalhes na listagem de Instrumentos
+- [x] Botão de detalhes na listagem de VPN
+- [x] Criar README.md detalhado para o GitHub
+- [x] Atualizar repositório no GitHub
