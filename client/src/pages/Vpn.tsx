@@ -49,9 +49,8 @@ export default function Vpn() {
   const { data: stats } = trpc.vpn.stats.useQuery();
 
   const statusData = [
-    { name: "Conectados", value: stats?.conectados ?? 0 },
-    { name: "Desconectados", value: stats?.desconectados ?? 0 },
-    { name: "Bloqueados", value: stats?.bloqueados ?? 0 },
+    { name: "Conectados", value: stats?.conectadas ?? 0 },
+    { name: "Desconectados", value: stats?.desconectadas ?? 0 },
   ].filter((d) => d.value > 0);
 
   const hasActiveFilters = statusFilter !== "all" || search;
@@ -100,7 +99,7 @@ export default function Vpn() {
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Conectados</p>
-                <p className="text-2xl sm:text-3xl font-bold text-emerald-700 mt-0.5">{stats?.conectados ?? 0}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-emerald-700 mt-0.5">{stats?.conectadas ?? 0}</p>
               </div>
               <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
                 <Wifi className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-600" />
@@ -113,7 +112,7 @@ export default function Vpn() {
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Desconectados</p>
-                <p className="text-2xl sm:text-3xl font-bold text-gray-600 mt-0.5">{stats?.desconectados ?? 0}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-600 mt-0.5">{stats?.desconectadas ?? 0}</p>
               </div>
               <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
                 <WifiOff className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500" />
@@ -126,7 +125,7 @@ export default function Vpn() {
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Bloqueados</p>
-                <p className="text-2xl sm:text-3xl font-bold text-red-700 mt-0.5">{stats?.bloqueados ?? 0}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-red-700 mt-0.5">0</p>
               </div>
               <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
                 <Ban className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
@@ -184,17 +183,17 @@ export default function Vpn() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Activity className="h-4 w-4 text-muted-foreground" />
-              Conexões por Diretoria
+              Conexões por Diretoria (Mockup)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {(stats?.porDiretoria ?? []).map((d) => {
-                const pct = ((d.count / (stats?.total ?? 1)) * 100);
+              {[{ diretoria: "Identificação Civil", count: 6 }, { diretoria: "Habilitacão", count: 3 }, { diretoria: "Registro de Veículos", count: 2 }, { diretoria: "Administração", count: 1 }].map((d) => {
+                const pct = ((d.count / 12) * 100);
                 return (
                   <div key={d.diretoria} className="flex items-center gap-3">
                     <span className="text-xs sm:text-sm text-muted-foreground w-32 sm:w-48 truncate shrink-0">
-                      {d.diretoria.replace("Diretoria de ", "")}
+                      {d.diretoria}
                     </span>
                     <div className="flex-1 bg-muted rounded-full h-2">
                       <div

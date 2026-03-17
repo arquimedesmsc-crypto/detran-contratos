@@ -34,3 +34,7 @@
 - [x] Melhorar responsividade da página de VPN (mobile-first)
 - [x] Verificar se todos os 57 instrumentos extraídos estão catalogados corretamente
 - [x] Verificar dados: diretorias, tipos, datas, processos SEI corretos + 5 termos aditivos faltantes adicionados
+- [x] API tRPC para exportação de instrumentos (PDF e Excel)
+- [x] Funções de exportação PDF e Excel no frontend
+- [x] Botões de exportação na página de Instrumentos
+- [x] Testar exportação PDF e Excel

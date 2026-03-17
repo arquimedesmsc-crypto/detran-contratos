@@ -7,7 +7,7 @@ import {
   listInstrumentos, getInstrumentoById, createInstrumento, updateInstrumento, deleteInstrumento,
   getDiretorias, getTipos, getStats, getAlertasVencimento, getTimelineData,
   getTermosByInstrumentoId, createTermoAditivo, deleteTermoAditivo,
-  listVpnConexoes, getVpnStats,
+  listVpnConexoes, getVpnStats, getAllInstrumentosForExport,
 } from "./db";
 
 export const appRouter = router({
@@ -69,6 +69,11 @@ export const appRouter = router({
     stats: publicProcedure.query(() => getStats()),
     alertas: publicProcedure.input(z.object({ dias: z.number().default(180) }).optional()).query(({ input }) => getAlertasVencimento(input?.dias ?? 180)),
     timeline: publicProcedure.query(() => getTimelineData()),
+    export: publicProcedure.input(z.object({
+      diretoria: z.string().optional(),
+      tipo: z.string().optional(),
+      search: z.string().optional(),
+    }).optional()).query(({ input }) => getAllInstrumentosForExport(input ?? undefined)),
   }),
 
   termos: router({

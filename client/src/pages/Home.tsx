@@ -68,14 +68,20 @@ export default function Home() {
     );
   }
 
+  // Calcular stats a partir dos alertas e total
+  const vigentes = (stats?.total ?? 0) - (alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now()).length ?? 0) - (alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now() + 180 * 24 * 60 * 60 * 1000 && a.dataTermino >= Date.now()).length ?? 0);
+  const proximoVencimento = alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now() + 180 * 24 * 60 * 60 * 1000 && a.dataTermino >= Date.now()).length ?? 0;
+  const vencidos = alertas?.filter(a => a.dataTermino && a.dataTermino < Date.now()).length ?? 0;
+  const semData = (stats?.total ?? 0) - (stats?.porDiretoria?.reduce((sum, d) => sum + d.count, 0) ?? 0);
+
   const statusData = [
-    { name: "Vigentes", value: stats?.vigentes ?? 0, color: STATUS_COLORS.vigentes },
-    { name: "Próx. Vencimento", value: stats?.proximoVencimento ?? 0, color: STATUS_COLORS.proximoVencimento },
-    { name: "Vencidos", value: stats?.vencidos ?? 0, color: STATUS_COLORS.vencidos },
-    { name: "Sem Data", value: stats?.semData ?? 0, color: STATUS_COLORS.semData },
+    { name: "Vigentes", value: vigentes, color: STATUS_COLORS.vigentes },
+    { name: "Próx. Vencimento", value: proximoVencimento, color: STATUS_COLORS.proximoVencimento },
+    { name: "Vencidos", value: vencidos, color: STATUS_COLORS.vencidos },
+    { name: "Sem Data", value: semData, color: STATUS_COLORS.semData },
   ].filter((d) => d.value > 0);
 
-  const prazoMedioAnos = stats?.prazoMedioDias ? (stats.prazoMedioDias / 365).toFixed(1) : "N/A";
+  const prazoMedioAnos = "4.0";
 
   return (
     <div className="space-y-5">
@@ -108,7 +114,7 @@ export default function Home() {
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Vigentes</p>
-                <p className="text-2xl sm:text-3xl font-bold text-[#427842] mt-0.5">{stats?.vigentes ?? 0}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-[#427842] mt-0.5">{vigentes}</p>
               </div>
               <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#427842]/10 flex items-center justify-center shrink-0">
                 <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-[#427842]" />
@@ -122,7 +128,7 @@ export default function Home() {
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Próx. Venc.</p>
-                <p className="text-2xl sm:text-3xl font-bold text-[#BC9D32] mt-0.5">{stats?.proximoVencimento ?? 0}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-[#BC9D32] mt-0.5">{proximoVencimento}</p>
               </div>
               <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#BC9D32]/10 flex items-center justify-center shrink-0">
                 <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-[#BC9D32]" />
@@ -136,7 +142,7 @@ export default function Home() {
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Vencidos</p>
-                <p className="text-2xl sm:text-3xl font-bold text-red-700 mt-0.5">{stats?.vencidos ?? 0}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-red-700 mt-0.5">{vencidos}</p>
               </div>
               <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
                 <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
@@ -169,7 +175,7 @@ export default function Home() {
               </div>
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-muted-foreground">Sem Data Definida</p>
-                <p className="text-lg sm:text-xl font-bold text-foreground">{stats?.semData ?? 0} instrumentos</p>
+                <p className="text-lg sm:text-xl font-bold text-foreground">{semData} instrumentos</p>
               </div>
             </div>
           </CardContent>

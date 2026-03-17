@@ -10,6 +10,11 @@ import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
+function formatDateUtil(ts: number | null): string {
+  if (!ts) return "Não definida";
+  return new Date(ts).toLocaleDateString("pt-BR");
+}
+
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -126,6 +131,27 @@ export async function deleteInstrumento(id: number) {
   await db.delete(instrumentos).where(eq(instrumentos.id, id));
 }
 
+export async function getAllInstrumentosForExport(filters?: {
+  diretoria?: string;
+  tipo?: string;
+  search?: string;
+}) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const conditions = [];
+  if (filters?.diretoria) conditions.push(eq(instrumentos.diretoria, filters.diretoria));
+  if (filters?.tipo) conditions.push(eq(instrumentos.tipo, filters.tipo));
+  if (filters?.search) conditions.push(
+    sql`(${instrumentos.numero} LIKE ${`%${filters.search}%`} OR ${instrumentos.partesEnvolvidas} LIKE ${`%${filters.search}%`} OR ${instrumentos.objeto} LIKE ${`%${filters.search}%`} OR ${instrumentos.processoSei} LIKE ${`%${filters.search}%`})`
+  );
+
+  const where = conditions.length > 0 ? and(...conditions) : undefined;
+
+  const items = await db.select().from(instrumentos).where(where).orderBy(asc(instrumentos.numero));
+  return items;
+}
+
 export async function getDiretorias() {
   const db = await getDb();
   if (!db) return [];
@@ -149,71 +175,73 @@ export async function getStats() {
 
   const [totalResult, porDiretoriaResult, porTipoResult, allItems] = await Promise.all([
     db.select({ count: count() }).from(instrumentos),
-    db.select({ diretoria: instrumentos.diretoria, count: count() }).from(instrumentos).groupBy(instrumentos.diretoria),
-    db.select({ tipo: instrumentos.tipo, count: count() }).from(instrumentos).groupBy(instrumentos.tipo),
+    db.selectDistinct({ diretoria: instrumentos.diretoria }).from(instrumentos),
+    db.selectDistinct({ tipo: instrumentos.tipo }).from(instrumentos),
     db.select().from(instrumentos),
   ]);
 
-  // Status counts
-  let vigentes = 0, proximoVencimento = 0, vencidos = 0, semData = 0;
-  const porAnoMap: Record<string, number> = {};
-  let totalDias = 0, countComDatas = 0;
+  const porDiretoria = porDiretoriaResult.map(r => {
+    const count = allItems.filter(i => i.diretoria === r.diretoria).length;
+    return { diretoria: r.diretoria, count };
+  });
 
-  for (const item of allItems) {
-    if (!item.dataTermino) { semData++; continue; }
-    if (item.dataTermino < now) vencidos++;
-    else if (item.dataTermino < threshold180) proximoVencimento++;
-    else vigentes++;
+  const porTipo = porTipoResult.map(r => {
+    const count = allItems.filter(i => i.tipo === r.tipo).length;
+    return { tipo: r.tipo, count };
+  });
 
-    if (item.dataInicio) {
-      const year = new Date(item.dataInicio).getFullYear().toString();
-      porAnoMap[year] = (porAnoMap[year] || 0) + 1;
-      totalDias += (item.dataTermino - item.dataInicio) / (1000 * 60 * 60 * 24);
-      countComDatas++;
-    }
-  }
+  const porAno = allItems
+    .filter(i => i.dataInicio)
+    .reduce((acc: Record<number, number>, i) => {
+      const year = new Date(i.dataInicio!).getFullYear();
+      acc[year] = (acc[year] ?? 0) + 1;
+      return acc;
+    }, {});
 
   return {
     total: totalResult[0]?.count ?? 0,
-    vigentes,
-    proximoVencimento,
-    vencidos,
-    semData,
-    prazoMedioDias: countComDatas > 0 ? Math.round(totalDias / countComDatas) : 0,
-    porDiretoria: porDiretoriaResult,
-    porTipo: porTipoResult,
-    porAno: Object.entries(porAnoMap).map(([ano, count]) => ({ ano, count })).sort((a, b) => a.ano.localeCompare(b.ano)),
+    porDiretoria,
+    porTipo,
+    porAno: Object.entries(porAno).map(([year, count]) => ({ year: parseInt(year), count })),
   };
 }
 
-export async function getAlertasVencimento(diasLimite: number = 180) {
+export async function getAlertasVencimento(dias: number) {
   const db = await getDb();
   if (!db) return [];
+
   const now = Date.now();
-  const threshold = now + diasLimite * 24 * 60 * 60 * 1000;
-  const allItems = await db.select().from(instrumentos)
-    .where(and(
-      sql`${instrumentos.dataTermino} IS NOT NULL`,
-      sql`${instrumentos.dataTermino} > ${now}`,
-      sql`${instrumentos.dataTermino} < ${threshold}`
-    ))
-    .orderBy(asc(instrumentos.dataTermino));
-  return allItems;
+  const threshold = now + dias * 24 * 60 * 60 * 1000;
+
+  const items = await db.select().from(instrumentos).orderBy(asc(instrumentos.dataTermino));
+  return items.filter(i => i.dataTermino && i.dataTermino <= threshold && i.dataTermino >= now);
 }
 
 export async function getTimelineData() {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(instrumentos)
-    .where(sql`${instrumentos.dataInicio} IS NOT NULL AND ${instrumentos.dataTermino} IS NOT NULL`)
-    .orderBy(asc(instrumentos.dataInicio));
+
+  const items = await db.select().from(instrumentos).where(and(
+    sql`${instrumentos.dataInicio} IS NOT NULL`,
+    sql`${instrumentos.dataTermino} IS NOT NULL`
+  )).orderBy(asc(instrumentos.dataInicio));
+
+  return items.map(i => ({
+    id: i.id,
+    numero: i.numero,
+    tipo: i.tipo,
+    dataInicio: i.dataInicio,
+    dataTermino: i.dataTermino,
+    diretoria: i.diretoria,
+  }));
 }
 
 // ==================== TERMOS ADITIVOS ====================
 export async function getTermosByInstrumentoId(instrumentoId: number) {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(termosAditivos).where(eq(termosAditivos.instrumentoId, instrumentoId)).orderBy(desc(termosAditivos.createdAt));
+  const result = await db.select().from(termosAditivos).where(eq(termosAditivos.instrumentoId, instrumentoId)).orderBy(asc(termosAditivos.dataAditivo));
+  return result;
 }
 
 export async function createTermoAditivo(data: InsertTermoAditivo) {
@@ -237,34 +265,30 @@ export async function listVpnConexoes(filters?: {
 }) {
   const db = await getDb();
   if (!db) return [];
+
   const conditions = [];
-  if (filters?.status) conditions.push(sql`${vpnConexoes.status} = ${filters.status}`);
+  if (filters?.status) conditions.push(eq(vpnConexoes.status, filters.status as any));
   if (filters?.diretoria) conditions.push(eq(vpnConexoes.diretoria, filters.diretoria));
   if (filters?.search) conditions.push(
-    sql`(${vpnConexoes.nomeUsuario} LIKE ${`%${filters.search}%`} OR ${vpnConexoes.matricula} LIKE ${`%${filters.search}%`})`
+    sql`(${vpnConexoes.nomeUsuario} LIKE ${`%${filters.search}%`} OR ${vpnConexoes.servidor} LIKE ${`%${filters.search}%`})`
   );
+
   const where = conditions.length > 0 ? and(...conditions) : undefined;
-  return db.select().from(vpnConexoes).where(where).orderBy(desc(vpnConexoes.updatedAt));
+  const result = await db.select().from(vpnConexoes).where(where).orderBy(asc(vpnConexoes.nomeUsuario));
+  return result;
 }
 
 export async function getVpnStats() {
   const db = await getDb();
-  if (!db) return { total: 0, conectados: 0, desconectados: 0, bloqueados: 0, porDiretoria: [] };
-  const all = await db.select().from(vpnConexoes);
-  let conectados = 0, desconectados = 0, bloqueados = 0;
-  const dirMap: Record<string, number> = {};
-  for (const c of all) {
-    if (c.status === "conectado") conectados++;
-    else if (c.status === "desconectado") desconectados++;
-    else bloqueados++;
-    const d = c.diretoria || "Não definida";
-    dirMap[d] = (dirMap[d] || 0) + 1;
-  }
-  return {
-    total: all.length,
-    conectados,
-    desconectados,
-    bloqueados,
-    porDiretoria: Object.entries(dirMap).map(([diretoria, count]) => ({ diretoria, count })),
-  };
+  if (!db) return { total: 0, conectadas: 0, desconectadas: 0 };
+
+  const [totalResult, conectadasResult] = await Promise.all([
+    db.select({ count: count() }).from(vpnConexoes),
+    db.select({ count: count() }).from(vpnConexoes).where(eq(vpnConexoes.status, "conectado" as any)),
+  ]);
+
+  const total = totalResult[0]?.count ?? 0;
+  const conectadas = conectadasResult[0]?.count ?? 0;
+
+  return { total, conectadas, desconectadas: total - conectadas };
 }

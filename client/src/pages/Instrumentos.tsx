@@ -1,4 +1,3 @@
-import { trpc } from "@/lib/trpc";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,11 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Search, ChevronLeft, ChevronRight, ArrowUpDown, Eye, FileText, Filter, X } from "lucide-react";
+import { Plus, Search, ChevronLeft, ChevronRight, ArrowUpDown, Eye, FileText, Filter, X, Download } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
 import { getStatusInstrumento, formatDate } from "@/lib/utils-instrumentos";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { exportToCSV, exportToPDF, formatInstrumentosForExport } from "@/lib/export-utils";
 
 export default function Instrumentos() {
   const [, setLocation] = useLocation();
@@ -44,6 +45,12 @@ export default function Instrumentos() {
     };
   });
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: exportData } = trpc.instrumentos.export.useQuery({
+    diretoria: diretoria !== "all" ? diretoria : undefined,
+    tipo: tipo !== "all" ? tipo : undefined,
+    search: searchQuery || undefined,
+  });
 
   const { data: diretorias } = trpc.instrumentos.diretorias.useQuery();
   const { data: tipos } = trpc.instrumentos.tipos.useQuery();
@@ -100,13 +107,45 @@ export default function Instrumentos() {
             Gerencie contratos, convênios e acordos de cooperação
           </p>
         </div>
-        {user && (
-          <Button onClick={() => setLocation("/instrumentos/novo")} className="gap-2 shrink-0 shadow-sm">
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">Novo Instrumento</span>
-            <span className="sm:hidden">Novo</span>
+        <div className="flex gap-2 shrink-0 flex-wrap sm:flex-nowrap">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 h-9 text-xs sm:text-sm"
+            onClick={() => {
+              if (exportData && exportData.length > 0) {
+                const formatted = formatInstrumentosForExport(exportData);
+                exportToCSV(formatted, `instrumentos_${new Date().toISOString().split('T')[0]}`);
+              }
+            }}
+          >
+            <Download className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Excel</span>
+            <span className="sm:hidden">XLS</span>
           </Button>
-        )}
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 h-9 text-xs sm:text-sm"
+            onClick={() => {
+              if (exportData && exportData.length > 0) {
+                const formatted = formatInstrumentosForExport(exportData);
+                exportToPDF(formatted, `instrumentos_${new Date().toISOString().split('T')[0]}`, "Relatório de Instrumentos - DETRAN-RJ");
+              }
+            }}
+          >
+            <FileText className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">PDF</span>
+            <span className="sm:hidden">PDF</span>
+          </Button>
+          {user && (
+            <Button onClick={() => setLocation("/instrumentos/novo")} className="gap-2 shrink-0 shadow-sm h-9 text-xs sm:text-sm">
+              <Plus className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Novo</span>
+              <span className="sm:hidden">+</span>
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Search + Filter Bar */}
