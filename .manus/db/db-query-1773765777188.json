@@ -1,0 +1,310 @@
+{
+  "query": "SELECT id, numero, tipo, diretoria, partesEnvolvidas, dataInicio, dataTermino, processoSei FROM instrumentos ORDER BY id LIMIT 30;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute SELECT id, numero, tipo, diretoria, partesEnvolvidas, dataInicio, dataTermino, processoSei FROM instrumentos ORDER BY id LIMIT 30;",
+  "rows": [
+    {
+      "id": "1",
+      "numero": "146/21",
+      "tipo": "Contrato",
+      "diretoria": "Diretoria de Registro de Veículos",
+      "partesEnvolvidas": "DETRAN-RJ e Consórcio Mercorio",
+      "dataInicio": "1640217600000",
+      "dataTermino": "1671667200000",
+      "processoSei": "SEI-160059/000870/2020"
+    },
+    {
+      "id": "2",
+      "numero": "103/2020",
+      "tipo": "Contrato",
+      "diretoria": "Diretoria de Registro de Veículos",
+      "partesEnvolvidas": "DETRAN-RJ e INSTITUTO BRASILEIRO DE ADMINISTRAÇÃO PÚBLICA E APOIO UNIVERSITÁRIO DO RIO DE JANEIRO (IBAP-RJ)",
+      "dataInicio": "1607299200000",
+      "dataTermino": "NULL",
+      "processoSei": "E-16/060/3199/2019"
+    },
+    {
+      "id": "3",
+      "numero": "119/2025",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Administração e Finanças",
+      "partesEnvolvidas": "DETRAN-RJ e Instituto Estadual do Ambiente (INEA)",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-070002/015290/2024"
+    },
+    {
+      "id": "4",
+      "numero": "100/2023",
+      "tipo": "Acordo de Cooperação Técnica",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Secretaria de Estado de Polícia Civil (SEPOL)",
+      "dataInicio": "1695340800000",
+      "dataTermino": "1853107200000",
+      "processoSei": "SEI-360306/000322/2021"
+    },
+    {
+      "id": "5",
+      "numero": "080/2021",
+      "tipo": "Termo de Cooperação Técnica",
+      "diretoria": "Diretoria de Registro de Veículos",
+      "partesEnvolvidas": "DETRAN-RJ e Município do Rio de Janeiro (SEOP)",
+      "dataInicio": "1616371200000",
+      "dataTermino": "1774137600000",
+      "processoSei": "SEI-160059/003786/2020"
+    },
+    {
+      "id": "6",
+      "numero": "495/2025",
+      "tipo": "Termo de Credenciamento",
+      "diretoria": "Diretoria de Registro de Veículos",
+      "partesEnvolvidas": "DETRAN-RJ e SYSTEMBANK LTDA",
+      "dataInicio": "1766966400000",
+      "dataTermino": "1829952000000",
+      "processoSei": "SEI-150016/178633/2025"
+    },
+    {
+      "id": "7",
+      "numero": "129/2021",
+      "tipo": "Contrato",
+      "diretoria": "Diretoria de Habilitação",
+      "partesEnvolvidas": "DETRAN/RJ e Valid Soluções S/A",
+      "dataInicio": "1638144000000",
+      "dataTermino": "1669593600000",
+      "processoSei": "SEI-150142/001269/2021"
+    },
+    {
+      "id": "8",
+      "numero": "135/2021",
+      "tipo": "Contrato",
+      "diretoria": "Diretoria de Administração e Finanças",
+      "partesEnvolvidas": "DETRAN-RJ e M.I. MONTREAL INFORMÁTICA S.A.",
+      "dataInicio": "1638144000000",
+      "dataTermino": "1669593600000",
+      "processoSei": "SEI-150142/001270/2021"
+    },
+    {
+      "id": "9",
+      "numero": "098/2020",
+      "tipo": "Contrato",
+      "diretoria": "Diretoria de Habilitação",
+      "partesEnvolvidas": "DETRAN-RJ e MD SOLUÇÕES E TERCEIRIZAÇÃO DE SERVIÇOS GERAIS LTDA",
+      "dataInicio": "1604448000000",
+      "dataTermino": "1730592000000",
+      "processoSei": "E-16/060/001424/2019"
+    },
+    {
+      "id": "10",
+      "numero": "105/2021",
+      "tipo": "Acordo de Cooperação Técnica",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Associação dos Registradores de Pessoas Naturais do Estado do Rio de Janeiro (ARPEN/RJ)",
+      "dataInicio": "1611532800000",
+      "dataTermino": "1769299200000",
+      "processoSei": "SEI-150023/000213/2021"
+    },
+    {
+      "id": "11",
+      "numero": "016/2022",
+      "tipo": "Acordo de Cooperação Técnica",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e COLÉGIO NOTARIAL DO BRASIL – SEÇÃO DO RIO DE JANEIRO (CNB/RJ)",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150016/001818/2021"
+    },
+    {
+      "id": "12",
+      "numero": "139/2021",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Conselho Regional de Enfermagem do Rio de Janeiro (COREN-RJ)",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-160045/000359/2020"
+    },
+    {
+      "id": "13",
+      "numero": "067/2022",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Defensoria Pública do Estado do Rio de Janeiro",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/002742/2022"
+    },
+    {
+      "id": "14",
+      "numero": "428/2025",
+      "tipo": "Termo de Cooperação Técnica",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Fundação Leão XIII",
+      "dataInicio": "1761177600000",
+      "dataTermino": "1918857600000",
+      "processoSei": "SEI-150016/141117/2025"
+    },
+    {
+      "id": "15",
+      "numero": "32/2025",
+      "tipo": "Acordo de Cooperação Técnica",
+      "diretoria": "Não Identificada",
+      "partesEnvolvidas": "DETRAN-RJ, Ministério Público do Estado do Rio de Janeiro (MPRJ) e Departamento Geral de Ação Socioeducativa (DEGASE)",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-MPRJ 20.22.0001.0063148.2023-86"
+    },
+    {
+      "id": "16",
+      "numero": "304/2025",
+      "tipo": "Termo de Cooperação Técnica",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Ministério Público do Estado do Rio de Janeiro (MPRJ)",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150016/054762/2025"
+    },
+    {
+      "id": "17",
+      "numero": "128/2023",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Prefeitura Municipal de Belford Roxo",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/003864/2023"
+    },
+    {
+      "id": "18",
+      "numero": "121/2024",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Campos dos Goytacazes",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/004479/2023"
+    },
+    {
+      "id": "19",
+      "numero": "007/2022",
+      "tipo": "Termo de Cooperação Técnica",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Carapebus",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/002667/2021"
+    },
+    {
+      "id": "20",
+      "numero": "266/2024",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Casimiro de Abreu",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150016/075127/2024"
+    },
+    {
+      "id": "21",
+      "numero": "113/2024",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Duque de Caxias, através da Secretaria Municipal de Assistência Social e Direitos Humanos",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150016/008563/2024"
+    },
+    {
+      "id": "22",
+      "numero": "315/2024",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Itaboraí",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/001871/2023"
+    },
+    {
+      "id": "23",
+      "numero": "039/2023",
+      "tipo": "Contrato",
+      "diretoria": "Diretoria de Apoio Operacional",
+      "partesEnvolvidas": "DETRAN-RJ e CENTRAL ASSESSORIA EM COBRANÇA LTDA. (CENCOB)",
+      "dataInicio": "1690848000000",
+      "dataTermino": "1753920000000",
+      "processoSei": "SEI-150153/001367/2021"
+    },
+    {
+      "id": "24",
+      "numero": "130/2021",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Macaé",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/000945/2021"
+    },
+    {
+      "id": "25",
+      "numero": "008/2022",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Magé",
+      "dataInicio": "1642723200000",
+      "dataTermino": "1800489600000",
+      "processoSei": "SEI-150060/001606/2021"
+    },
+    {
+      "id": "26",
+      "numero": "044/2024",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Maricá",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/005754/2022"
+    },
+    {
+      "id": "27",
+      "numero": "081/2022",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Mendes",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150060/001252/2022"
+    },
+    {
+      "id": "28",
+      "numero": "053/2022",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Mesquita",
+      "dataInicio": "1664150400000",
+      "dataTermino": "1821830400000",
+      "processoSei": "SEI-150065/002254/2022"
+    },
+    {
+      "id": "29",
+      "numero": "131/2021",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Niterói, através da Secretaria Municipal de Direitos Humanos",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150058/003890/2021"
+    },
+    {
+      "id": "30",
+      "numero": "031/2023",
+      "tipo": "Convênio",
+      "diretoria": "Diretoria de Identificação Civil",
+      "partesEnvolvidas": "DETRAN-RJ e Município de Petrópolis (Secretaria Municipal de Assistência Social, Habitação e Regularização Fundiária)",
+      "dataInicio": "NULL",
+      "dataTermino": "NULL",
+      "processoSei": "SEI-150060/000217/2022"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnumero\ttipo\tdiretoria\tpartesEnvolvidas\tdataInicio\tdataTermino\tprocessoSei\n1\t146/21\tContrato\tDiretoria de Registro de Veículos\tDETRAN-RJ e Consórcio Mercorio\t1640217600000\t1671667200000\tSEI-160059/000870/2020\n2\t103/2020\tContrato\tDiretoria de Registro de Veículos\tDETRAN-RJ e INSTITUTO BRASILEIRO DE ADMINISTRAÇÃO PÚBLICA E APOIO UNIVERSITÁRIO DO RIO DE JANEIRO (IBAP-RJ)\t1607299200000\tNULL\tE-16/060/3199/2019\n3\t119/2025\tConvênio\tDiretoria de Administração e Finanças\tDETRAN-RJ e Instituto Estadual do Ambiente (INEA)\tNULL\tNULL\tSEI-070002/015290/2024\n4\t100/2023\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\tDETRAN-RJ e Secretaria de Estado de Polícia Civil (SEPOL)\t1695340800000\t1853107200000\tSEI-360306/000322/2021\n5\t080/2021\tTermo de Cooperação Técnica\tDiretoria de Registro de Veículos\tDETRAN-RJ e Município do Rio de Janeiro (SEOP)\t1616371200000\t1774137600000\tSEI-160059/003786/2020\n6\t495/2025\tTermo de Credenciamento\tDiretoria de Registro de Veículos\tDETRAN-RJ e SYSTEMBANK LTDA\t1766966400000\t1829952000000\tSEI-150016/178633/2025\n7\t129/2021\tContrato\tDiretoria de Habilitação\tDETRAN/RJ e Valid Soluções S/A\t1638144000000\t1669593600000\tSEI-150142/001269/2021\n8\t135/2021\tContrato\tDiretoria de Administração e Finanças\tDETRAN-RJ e M.I. MONTREAL INFORMÁTICA S.A.\t1638144000000\t1669593600000\tSEI-150142/001270/2021\n9\t098/2020\tContrato\tDiretoria de Habilitação\tDETRAN-RJ e MD SOLUÇÕES E TERCEIRIZAÇÃO DE SERVIÇOS GERAIS LTDA\t1604448000000\t1730592000000\tE-16/060/001424/2019\n10\t105/2021\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\tDETRAN-RJ e Associação dos Registradores de Pessoas Naturais do Estado do Rio de Janeiro (ARPEN/RJ)\t1611532800000\t1769299200000\tSEI-150023/000213/2021\n11\t016/2022\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\tDETRAN-RJ e COLÉGIO NOTARIAL DO BRASIL – SEÇÃO DO RIO DE JANEIRO (CNB/RJ)\tNULL\tNULL\tSEI-150016/001818/2021\n12\t139/2021\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Conselho Regional de Enfermagem do Rio de Janeiro (COREN-RJ)\tNULL\tNULL\tSEI-160045/000359/2020\n13\t067/2022\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Defensoria Pública do Estado do Rio de Janeiro\tNULL\tNULL\tSEI-150058/002742/2022\n14\t428/2025\tTermo de Cooperação Técnica\tDiretoria de Identificação Civil\tDETRAN-RJ e Fundação Leão XIII\t1761177600000\t1918857600000\tSEI-150016/141117/2025\n15\t32/2025\tAcordo de Cooperação Técnica\tNão Identificada\tDETRAN-RJ, Ministério Público do Estado do Rio de Janeiro (MPRJ) e Departamento Geral de Ação Socioeducativa (DEGASE)\tNULL\tNULL\tSEI-MPRJ 20.22.0001.0063148.2023-86\n16\t304/2025\tTermo de Cooperação Técnica\tDiretoria de Identificação Civil\tDETRAN-RJ e Ministério Público do Estado do Rio de Janeiro (MPRJ)\tNULL\tNULL\tSEI-150016/054762/2025\n17\t128/2023\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Prefeitura Municipal de Belford Roxo\tNULL\tNULL\tSEI-150058/003864/2023\n18\t121/2024\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Campos dos Goytacazes\tNULL\tNULL\tSEI-150058/004479/2023\n19\t007/2022\tTermo de Cooperação Técnica\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Carapebus\tNULL\tNULL\tSEI-150058/002667/2021\n20\t266/2024\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Casimiro de Abreu\tNULL\tNULL\tSEI-150016/075127/2024\n21\t113/2024\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Duque de Caxias, através da Secretaria Municipal de Assistência Social e Direitos Humanos\tNULL\tNULL\tSEI-150016/008563/2024\n22\t315/2024\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Itaboraí\tNULL\tNULL\tSEI-150058/001871/2023\n23\t039/2023\tContrato\tDiretoria de Apoio Operacional\tDETRAN-RJ e CENTRAL ASSESSORIA EM COBRANÇA LTDA. (CENCOB)\t1690848000000\t1753920000000\tSEI-150153/001367/2021\n24\t130/2021\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Macaé\tNULL\tNULL\tSEI-150058/000945/2021\n25\t008/2022\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Magé\t1642723200000\t1800489600000\tSEI-150060/001606/2021\n26\t044/2024\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Maricá\tNULL\tNULL\tSEI-150058/005754/2022\n27\t081/2022\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Mendes\tNULL\tNULL\tSEI-150060/001252/2022\n28\t053/2022\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Mesquita\t1664150400000\t1821830400000\tSEI-150065/002254/2022\n29\t131/2021\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Niterói, através da Secretaria Municipal de Direitos Humanos\tNULL\tNULL\tSEI-150058/003890/2021\n30\t031/2023\tConvênio\tDiretoria de Identificação Civil\tDETRAN-RJ e Município de Petrópolis (Secretaria Municipal de Assistência Social, Habitação e Regularização Fundiária)\tNULL\tNULL\tSEI-150060/000217/2022\n",
+  "stderr": "",
+  "execution_time_ms": 182
+}

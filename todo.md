@@ -26,3 +26,11 @@
 - [x] API tRPC para VPN com dados mockup
 - [x] Página de VPN com listagem de conexões e status
 - [x] Dashboard VPN com indicadores de conexão
+- [x] Aplicar identidade visual oficial do Estado do RJ (cores #005A92, #BC9D32, #427842, gradientes)
+- [x] Trocar fonte para Roboto (fonte de apoio oficial do manual de marca)
+- [x] Melhorar formatação e tipografia da página de Instrumentos
+- [x] Melhorar responsividade da página de Instrumentos (mobile-first)
+- [x] Melhorar formatação e tipografia da página de VPN
+- [x] Melhorar responsividade da página de VPN (mobile-first)
+- [x] Verificar se todos os 57 instrumentos extraídos estão catalogados corretamente
+- [x] Verificar dados: diretorias, tipos, datas, processos SEI corretos + 5 termos aditivos faltantes adicionados

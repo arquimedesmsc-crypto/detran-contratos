@@ -1,0 +1,10 @@
+{
+  "query": "SELECT COUNT(*) as total_aditivos FROM termos_aditivos; SELECT ta.id, ta.instrumentoId, i.numero, ta.numero as aditivo_num, ta.descricao FROM termos_aditivos ta JOIN instrumentos i ON ta.instrumentoId = i.id LIMIT 15;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute SELECT COUNT(*) as total_aditivos FROM termos_aditivos; SELECT ta.id, ta.instrumentoId, i.numero, ta.numero as aditivo_num, ta.descricao FROM termos_aditivos ta JOIN instrumentos i ON ta.instrumentoId = i.id LIMIT 15;",
+  "returncode": 1,
+  "logs": [
+    "total_aditivos",
+    "2",
+    "ERROR 1054 (42S22) at line 1: Unknown column 'ta.numero' in 'field list'"
+  ]
+}

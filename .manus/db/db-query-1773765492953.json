@@ -1,0 +1,52 @@
+{
+  "query": "SELECT COUNT(*) as com_data FROM instrumentos WHERE dataInicio IS NOT NULL AND dataTermino IS NOT NULL; SELECT COUNT(*) as sem_data FROM instrumentos WHERE dataInicio IS NULL OR dataTermino IS NULL; SELECT id, numero, tipo, diretoria, dataInicio, dataTermino FROM instrumentos WHERE dataInicio IS NOT NULL AND dataTermino IS NOT NULL LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute SELECT COUNT(*) as com_data FROM instrumentos WHERE dataInicio IS NOT NULL AND dataTermino IS NOT NULL; SELECT COUNT(*) as sem_data FROM instrumentos WHERE dataInicio IS NULL OR dataTermino IS NULL; SELECT id, numero, tipo, diretoria, dataInicio, dataTermino FROM instrumentos WHERE dataInicio IS NOT NULL AND dataTermino IS NOT NULL LIMIT 10;",
+  "rows": [
+    {
+      "com_data": "21"
+    },
+    {
+      "com_data": "sem_data"
+    },
+    {
+      "com_data": "36"
+    },
+    {
+      "com_data": "id\tnumero\ttipo\tdiretoria\tdataInicio\tdataTermino"
+    },
+    {
+      "com_data": "1\t146/21\tContrato\tDiretoria de Registro de Veículos\t1640217600000\t1671667200000"
+    },
+    {
+      "com_data": "4\t100/2023\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\t1695340800000\t1853107200000"
+    },
+    {
+      "com_data": "5\t080/2021\tTermo de Cooperação Técnica\tDiretoria de Registro de Veículos\t1616371200000\t1774137600000"
+    },
+    {
+      "com_data": "6\t495/2025\tTermo de Credenciamento\tDiretoria de Registro de Veículos\t1766966400000\t1829952000000"
+    },
+    {
+      "com_data": "7\t129/2021\tContrato\tDiretoria de Habilitação\t1638144000000\t1669593600000"
+    },
+    {
+      "com_data": "8\t135/2021\tContrato\tDiretoria de Administração e Finanças\t1638144000000\t1669593600000"
+    },
+    {
+      "com_data": "9\t098/2020\tContrato\tDiretoria de Habilitação\t1604448000000\t1730592000000"
+    },
+    {
+      "com_data": "10\t105/2021\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\t1611532800000\t1769299200000"
+    },
+    {
+      "com_data": "14\t428/2025\tTermo de Cooperação Técnica\tDiretoria de Identificação Civil\t1761177600000\t1918857600000"
+    },
+    {
+      "com_data": "23\t039/2023\tContrato\tDiretoria de Apoio Operacional\t1690848000000\t1753920000000"
+    }
+  ],
+  "messages": [],
+  "stdout": "com_data\n21\nsem_data\n36\nid\tnumero\ttipo\tdiretoria\tdataInicio\tdataTermino\n1\t146/21\tContrato\tDiretoria de Registro de Veículos\t1640217600000\t1671667200000\n4\t100/2023\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\t1695340800000\t1853107200000\n5\t080/2021\tTermo de Cooperação Técnica\tDiretoria de Registro de Veículos\t1616371200000\t1774137600000\n6\t495/2025\tTermo de Credenciamento\tDiretoria de Registro de Veículos\t1766966400000\t1829952000000\n7\t129/2021\tContrato\tDiretoria de Habilitação\t1638144000000\t1669593600000\n8\t135/2021\tContrato\tDiretoria de Administração e Finanças\t1638144000000\t1669593600000\n9\t098/2020\tContrato\tDiretoria de Habilitação\t1604448000000\t1730592000000\n10\t105/2021\tAcordo de Cooperação Técnica\tDiretoria de Identificação Civil\t1611532800000\t1769299200000\n14\t428/2025\tTermo de Cooperação Técnica\tDiretoria de Identificação Civil\t1761177600000\t1918857600000\n23\t039/2023\tContrato\tDiretoria de Apoio Operacional\t1690848000000\t1753920000000\n",
+  "stderr": "",
+  "execution_time_ms": 73
+}

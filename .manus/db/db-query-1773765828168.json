@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (1, '1º Termo Aditivo - Prorrogação do prazo contratual e aplicação de reajuste'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (2, '1º Termo Aditivo - Prorrogação do prazo do contrato por mais 12 meses e aplicação de reajuste de valores'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (9, '1º Termo Aditivo - Prorrogação de prazo'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (9, '2º Termo Aditivo - Alteração qualitativa e quantitativa'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (9, '3º Termo Aditivo - Prorrogação de prazo');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (1, '1º Termo Aditivo - Prorrogação do prazo contratual e aplicação de reajuste'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (2, '1º Termo Aditivo - Prorrogação do prazo do contrato por mais 12 meses e aplicação de reajuste de valores'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (9, '1º Termo Aditivo - Prorrogação de prazo'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (9, '2º Termo Aditivo - Alteração qualitativa e quantitativa'); INSERT INTO termos_aditivos (instrumentoId, descricao) VALUES (9, '3º Termo Aditivo - Prorrogação de prazo');",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 164
+}

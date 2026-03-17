@@ -1,0 +1,22 @@
+{
+  "query": "SELECT COUNT(*) as total_aditivos FROM termos_aditivos; SELECT ta.id, ta.instrumentoId, i.numero, ta.descricao FROM termos_aditivos ta JOIN instrumentos i ON ta.instrumentoId = i.id LIMIT 15;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute SELECT COUNT(*) as total_aditivos FROM termos_aditivos; SELECT ta.id, ta.instrumentoId, i.numero, ta.descricao FROM termos_aditivos ta JOIN instrumentos i ON ta.instrumentoId = i.id LIMIT 15;",
+  "rows": [
+    {
+      "total_aditivos": "2"
+    },
+    {
+      "total_aditivos": "id\tinstrumentoId\tnumero\tdescricao"
+    },
+    {
+      "total_aditivos": "1\t23\t039/2023\tPrimeiro Termo Aditivo - Prorrogação de vigência por 12 meses"
+    },
+    {
+      "total_aditivos": "2\t23\t039/2023\tSegundo Termo Aditivo - Reajuste de valor contratual"
+    }
+  ],
+  "messages": [],
+  "stdout": "total_aditivos\n2\nid\tinstrumentoId\tnumero\tdescricao\n1\t23\t039/2023\tPrimeiro Termo Aditivo - Prorrogação de vigência por 12 meses\n2\t23\t039/2023\tSegundo Termo Aditivo - Reajuste de valor contratual\n",
+  "stderr": "",
+  "execution_time_ms": 68
+}

@@ -1,0 +1,55 @@
+{
+  "query": "SELECT COUNT(*) as total FROM instrumentos; SELECT diretoria, COUNT(*) as qtd FROM instrumentos GROUP BY diretoria ORDER BY qtd DESC; SELECT tipo, COUNT(*) as qtd FROM instrumentos GROUP BY tipo ORDER BY qtd DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4Kzn8Ew9LunbFoC.root --database MDXpDWKkLJQQcpGvzWTLe8 --execute SELECT COUNT(*) as total FROM instrumentos; SELECT diretoria, COUNT(*) as qtd FROM instrumentos GROUP BY diretoria ORDER BY qtd DESC; SELECT tipo, COUNT(*) as qtd FROM instrumentos GROUP BY tipo ORDER BY qtd DESC;",
+  "rows": [
+    {
+      "total": "57"
+    },
+    {
+      "total": "diretoria\tqtd"
+    },
+    {
+      "total": "Diretoria de Identificação Civil\t39"
+    },
+    {
+      "total": "Não Identificada\t9"
+    },
+    {
+      "total": "Diretoria de Registro de Veículos\t4"
+    },
+    {
+      "total": "Diretoria de Habilitação\t2"
+    },
+    {
+      "total": "Diretoria de Administração e Finanças\t2"
+    },
+    {
+      "total": "Diretoria de Apoio Operacional\t1"
+    },
+    {
+      "total": "tipo\tqtd"
+    },
+    {
+      "total": "Convênio\t27"
+    },
+    {
+      "total": "Acordo de Cooperação Técnica\t11"
+    },
+    {
+      "total": "Termo de Cooperação Técnica\t10"
+    },
+    {
+      "total": "Contrato\t6"
+    },
+    {
+      "total": "Acordo de Cooperação\t2"
+    },
+    {
+      "total": "Termo de Credenciamento\t1"
+    }
+  ],
+  "messages": [],
+  "stdout": "total\n57\ndiretoria\tqtd\nDiretoria de Identificação Civil\t39\nNão Identificada\t9\nDiretoria de Registro de Veículos\t4\nDiretoria de Habilitação\t2\nDiretoria de Administração e Finanças\t2\nDiretoria de Apoio Operacional\t1\ntipo\tqtd\nConvênio\t27\nAcordo de Cooperação Técnica\t11\nTermo de Cooperação Técnica\t10\nContrato\t6\nAcordo de Cooperação\t2\nTermo de Credenciamento\t1\n",
+  "stderr": "",
+  "execution_time_ms": 82
+}

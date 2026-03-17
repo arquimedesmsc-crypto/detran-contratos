@@ -8,6 +8,8 @@ import {
   XCircle,
   Clock,
   Calendar,
+  BarChart3,
+  PieChartIcon,
 } from "lucide-react";
 import {
   BarChart,
@@ -25,21 +27,22 @@ import {
 import { getStatusInstrumento, formatDate } from "@/lib/utils-instrumentos";
 import { useLocation } from "wouter";
 
+/* Cores oficiais do manual de marca do Estado do RJ */
 const PIE_COLORS = [
-  "oklch(0.55 0.15 250)",
-  "oklch(0.65 0.18 160)",
-  "oklch(0.72 0.16 80)",
-  "oklch(0.58 0.20 310)",
-  "oklch(0.60 0.15 30)",
-  "oklch(0.50 0.12 200)",
-  "oklch(0.68 0.14 120)",
+  "#005A92", /* Azul oficial */
+  "#427842", /* Verde oficial */
+  "#BC9D32", /* Dourado oficial */
+  "#7B5EA7", /* Roxo complementar */
+  "#A0A0A0", /* Cinza oficial */
+  "#2D7D9A", /* Azul turquesa */
+  "#8B6914", /* Dourado escuro */
 ];
 
 const STATUS_COLORS = {
-  vigentes: "oklch(0.60 0.18 145)",
-  proximoVencimento: "oklch(0.75 0.16 80)",
-  vencidos: "oklch(0.55 0.22 25)",
-  semData: "oklch(0.65 0.02 250)",
+  vigentes: "#427842",       /* Verde oficial */
+  proximoVencimento: "#BC9D32", /* Dourado oficial */
+  vencidos: "#C53030",       /* Vermelho */
+  semData: "#A0A0A0",        /* Cinza oficial */
 };
 
 export default function Home() {
@@ -49,15 +52,15 @@ export default function Home() {
 
   if (statsLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-5">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Visão geral dos instrumentos jurídicos</p>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">Visão geral dos instrumentos jurídicos</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="p-6"><div className="h-16 bg-muted rounded" /></CardContent>
+              <CardContent className="p-4 sm:p-5"><div className="h-16 bg-muted rounded" /></CardContent>
             </Card>
           ))}
         </div>
@@ -75,67 +78,68 @@ export default function Home() {
   const prazoMedioAnos = stats?.prazoMedioDias ? (stats.prazoMedioDias / 365).toFixed(1) : "N/A";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Dashboard</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Visão geral dos instrumentos jurídicos do DETRAN-RJ
         </p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-primary">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total de Instrumentos</p>
-                <p className="text-3xl font-bold text-foreground mt-1">{stats?.total ?? 0}</p>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="border-l-4 border-l-[#005A92]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Total</p>
+                <p className="text-2xl sm:text-3xl font-bold text-foreground mt-0.5">{stats?.total ?? 0}</p>
               </div>
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <FileText className="h-6 w-6 text-primary" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-l-4 border-l-emerald-500">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Vigentes</p>
-                <p className="text-3xl font-bold text-emerald-700 mt-1">{stats?.vigentes ?? 0}</p>
-              </div>
-              <div className="h-12 w-12 rounded-lg bg-emerald-50 flex items-center justify-center">
-                <CheckCircle className="h-6 w-6 text-emerald-600" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#005A92]/10 flex items-center justify-center shrink-0">
+                <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-[#005A92]" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Próx. Vencimento</p>
-                <p className="text-3xl font-bold text-amber-700 mt-1">{stats?.proximoVencimento ?? 0}</p>
+        <Card className="border-l-4 border-l-[#427842]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Vigentes</p>
+                <p className="text-2xl sm:text-3xl font-bold text-[#427842] mt-0.5">{stats?.vigentes ?? 0}</p>
               </div>
-              <div className="h-12 w-12 rounded-lg bg-amber-50 flex items-center justify-center">
-                <AlertTriangle className="h-6 w-6 text-amber-600" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#427842]/10 flex items-center justify-center shrink-0">
+                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-[#427842]" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-500">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Vencidos</p>
-                <p className="text-3xl font-bold text-red-700 mt-1">{stats?.vencidos ?? 0}</p>
+        <Card className="border-l-4 border-l-[#BC9D32]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Próx. Venc.</p>
+                <p className="text-2xl sm:text-3xl font-bold text-[#BC9D32] mt-0.5">{stats?.proximoVencimento ?? 0}</p>
               </div>
-              <div className="h-12 w-12 rounded-lg bg-red-50 flex items-center justify-center">
-                <XCircle className="h-6 w-6 text-red-600" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-[#BC9D32]/10 flex items-center justify-center shrink-0">
+                <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-[#BC9D32]" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-red-600">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Vencidos</p>
+                <p className="text-2xl sm:text-3xl font-bold text-red-700 mt-0.5">{stats?.vencidos ?? 0}</p>
+              </div>
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
               </div>
             </div>
           </CardContent>
@@ -143,29 +147,29 @@ export default function Home() {
       </div>
 
       {/* Extra KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center gap-4">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Clock className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-lg bg-[#005A92]/10 flex items-center justify-center shrink-0">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-[#005A92]" />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Prazo Médio de Vigência</p>
-                <p className="text-xl font-bold text-foreground">{prazoMedioAnos} anos</p>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-muted-foreground">Prazo Médio de Vigência</p>
+                <p className="text-lg sm:text-xl font-bold text-foreground">{prazoMedioAnos} anos</p>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center gap-4">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Calendar className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-lg bg-[#A0A0A0]/10 flex items-center justify-center shrink-0">
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-[#A0A0A0]" />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Sem Data Definida</p>
-                <p className="text-xl font-bold text-foreground">{stats?.semData ?? 0} instrumentos</p>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-muted-foreground">Sem Data Definida</p>
+                <p className="text-lg sm:text-xl font-bold text-foreground">{stats?.semData ?? 0} instrumentos</p>
               </div>
             </div>
           </CardContent>
@@ -173,14 +177,17 @@ export default function Home() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
         {/* Distribuição por Diretoria */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold">Por Diretoria</CardTitle>
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              Por Diretoria
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={280}>
               <BarChart
                 data={(stats?.porDiretoria ?? []).map((d) => ({
                   name: d.diretoria.replace("Diretoria de ", "").replace("Diretoria ", ""),
@@ -189,17 +196,18 @@ export default function Home() {
                 layout="vertical"
                 margin={{ left: 10, right: 20, top: 5, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.90 0.01 250)" />
-                <XAxis type="number" tick={{ fontSize: 12 }} />
-                <YAxis type="category" dataKey="name" width={160} tick={{ fontSize: 11 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis type="number" tick={{ fontSize: 11 }} />
+                <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 10 }} />
                 <Tooltip
                   contentStyle={{
                     borderRadius: "8px",
-                    border: "1px solid oklch(0.90 0.01 250)",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    fontSize: "12px",
+                    border: "1px solid #e5e7eb",
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
                   }}
                 />
-                <Bar dataKey="total" fill="oklch(0.45 0.12 250)" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="total" fill="#005A92" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -208,27 +216,38 @@ export default function Home() {
         {/* Status de Vigência */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold">Status de Vigência</CardTitle>
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <PieChartIcon className="h-4 w-4 text-muted-foreground" />
+              Status de Vigência
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={280}>
               <PieChart>
                 <Pie
                   data={statusData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
+                  innerRadius={55}
+                  outerRadius={90}
                   paddingAngle={3}
                   dataKey="value"
+                  strokeWidth={2}
                   label={({ name, value }) => `${name}: ${value}`}
                 >
                   {statusData.map((entry, index) => (
                     <Cell key={index} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: "8px",
+                    fontSize: "12px",
+                    border: "1px solid #e5e7eb",
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: "12px" }} iconType="circle" iconSize={8} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -237,10 +256,13 @@ export default function Home() {
         {/* Distribuição por Tipo */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold">Por Tipo de Instrumento</CardTitle>
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <PieChartIcon className="h-4 w-4 text-muted-foreground" />
+              Por Tipo de Instrumento
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={280}>
               <PieChart>
                 <Pie
                   data={(stats?.porTipo ?? []).map((d) => ({
@@ -249,17 +271,25 @@ export default function Home() {
                   }))}
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
+                  outerRadius={90}
                   paddingAngle={2}
                   dataKey="value"
-                  label={({ name, value }) => `${value}`}
+                  strokeWidth={2}
+                  label={({ value }) => `${value}`}
                 >
                   {(stats?.porTipo ?? []).map((_, index) => (
                     <Cell key={index} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: "8px",
+                    fontSize: "12px",
+                    border: "1px solid #e5e7eb",
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: "11px" }} iconType="circle" iconSize={8} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -268,25 +298,29 @@ export default function Home() {
         {/* Distribuição por Ano */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold">Por Ano de Início</CardTitle>
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              Por Ano de Início
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={280}>
               <BarChart
                 data={stats?.porAno ?? []}
                 margin={{ left: 0, right: 20, top: 5, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.90 0.01 250)" />
-                <XAxis dataKey="ano" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="ano" tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip
                   contentStyle={{
                     borderRadius: "8px",
-                    border: "1px solid oklch(0.90 0.01 250)",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    fontSize: "12px",
+                    border: "1px solid #e5e7eb",
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
                   }}
                 />
-                <Bar dataKey="count" name="Instrumentos" fill="oklch(0.65 0.18 160)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" name="Instrumentos" fill="#427842" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -295,37 +329,38 @@ export default function Home() {
 
       {/* Alertas de Vencimento */}
       {!alertasLoading && alertas && alertas.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50/30">
+        <Card className="border-[#BC9D32]/30 bg-[#BC9D32]/5">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold flex items-center gap-2 text-amber-800">
-              <AlertTriangle className="h-5 w-5" />
+            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-[#8B6914]">
+              <AlertTriangle className="h-4 w-4" />
               Instrumentos Próximos do Vencimento ({alertas.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {alertas.slice(0, 5).map((item) => {
                 const status = getStatusInstrumento(item.dataTermino);
                 return (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-3 bg-white rounded-lg border cursor-pointer hover:shadow-sm transition-shadow"
+                    className="flex items-center justify-between p-3 bg-white rounded-lg border cursor-pointer hover:shadow-sm transition-all active:scale-[0.99]"
                     onClick={() => setLocation(`/instrumentos/${item.id}`)}
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm text-foreground">{item.tipo} {item.numero}</span>
-                        <Badge variant="outline" className={`text-xs ${status.bgColor} ${status.color} border`}>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-sm text-foreground">{item.tipo} {item.numero}</span>
+                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${status.bgColor} ${status.color} border`}>
+                          <span className={`w-1 h-1 rounded-full ${status.dotColor} mr-1`} />
                           {status.label}
                         </Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1 truncate">
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
                         {item.partesEnvolvidas}
                       </p>
                     </div>
                     <div className="text-right ml-4 shrink-0">
-                      <p className="text-xs text-muted-foreground">Vencimento</p>
-                      <p className="text-sm font-medium text-amber-700">{formatDate(item.dataTermino)}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Vencimento</p>
+                      <p className="text-sm font-semibold text-[#BC9D32] tabular-nums">{formatDate(item.dataTermino)}</p>
                     </div>
                   </div>
                 );
@@ -333,7 +368,7 @@ export default function Home() {
               {alertas.length > 5 && (
                 <button
                   onClick={() => setLocation("/alertas")}
-                  className="text-sm text-primary hover:underline font-medium"
+                  className="text-sm text-primary hover:underline font-medium mt-1"
                 >
                   Ver todos os {alertas.length} alertas →
                 </button>
