@@ -112,3 +112,7 @@
 - [x] Criar Coding Standards (backend tRPC/Drizzle/testes, frontend React/Tailwind/shadcn)
 - [x] Criar skill reutilizável (SKILL.md) para Manus e instruções para Claude Code
 - [x] Atualizar README e sincronizar repositório GitHub
+- [x] Atualizar README.md com estado completo do projeto (features, skill, domínios, PWA)
+- [x] Atualizar CHANGELOG.md com versão final
+- [x] Revisar todo.md para garantir consistência
+- [x] Sincronizar com GitHub via checkpoint

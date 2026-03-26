@@ -4,6 +4,16 @@ Todas as alterações relevantes deste projeto são documentadas neste arquivo, 
 
 ---
 
+## [1.5.0] — 2026-03-26
+
+### 📝 Documentação
+- **README.md** completamente reescrito com todas as features atualizadas, domínios publicados (`detranmgmt-mdxpdwkk.manus.space` e `detran-vpn.manus.space`), seção da skill `detran-design-system`, badges com versão, paleta de cores com OKLCH, URLs CDN de todas as logos, e roadmap atualizado com 15 itens concluídos
+- **CHANGELOG.md** atualizado com versão 1.5.0
+- **todo.md** revisado e atualizado com 119 itens rastreados
+- Repositório GitHub sincronizado com a versão mais recente
+
+---
+
 ## [1.4.0] — 2026-03-17
 
 ### ✨ Adicionado
